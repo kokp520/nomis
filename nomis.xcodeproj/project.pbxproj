@@ -8,17 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6CA2D549D0400038001 /* nomisApp.swift */; };
-		5204F6CD2D549D0400038001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6CC2D549D0400038001 /* ContentView.swift */; };
+		5204F6CD2D549D0400038001 /* ContentViewTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6CC2D549D0400038001 /* ContentViewTemp.swift */; };
 		5204F6CF2D549D1000038001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5204F6CE2D549D1000038001 /* Assets.xcassets */; };
 		5204F6D22D549D1000038001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5204F6D12D549D1000038001 /* Preview Assets.xcassets */; };
+		5204F6DB2D549FEF00038001 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6D92D549FEF00038001 /* Expense.swift */; };
+		5204F6DF2D549FF900038001 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6DC2D549FF900038001 /* AddExpenseView.swift */; };
+		5204F6E02D549FF900038001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6DD2D549FF900038001 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5204F6C72D549D0400038001 /* nomis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nomis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5204F6CA2D549D0400038001 /* nomisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nomisApp.swift; sourceTree = "<group>"; };
-		5204F6CC2D549D0400038001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5204F6CC2D549D0400038001 /* ContentViewTemp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTemp.swift; sourceTree = "<group>"; };
 		5204F6CE2D549D1000038001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5204F6D12D549D1000038001 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5204F6D92D549FEF00038001 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		5204F6DC2D549FF900038001 /* AddExpenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
+		5204F6DD2D549FF900038001 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +57,10 @@
 		5204F6C92D549D0400038001 /* nomis */ = {
 			isa = PBXGroup;
 			children = (
+				5204F6DE2D549FF900038001 /* Views */,
+				5204F6DA2D549FEF00038001 /* Models */,
 				5204F6CA2D549D0400038001 /* nomisApp.swift */,
-				5204F6CC2D549D0400038001 /* ContentView.swift */,
+				5204F6CC2D549D0400038001 /* ContentViewTemp.swift */,
 				5204F6CE2D549D1000038001 /* Assets.xcassets */,
 				5204F6D02D549D1000038001 /* Preview Content */,
 			);
@@ -65,6 +73,23 @@
 				5204F6D12D549D1000038001 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		5204F6DA2D549FEF00038001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5204F6D92D549FEF00038001 /* Expense.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5204F6DE2D549FF900038001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5204F6DC2D549FF900038001 /* AddExpenseView.swift */,
+				5204F6DD2D549FF900038001 /* ContentView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +162,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5204F6CD2D549D0400038001 /* ContentView.swift in Sources */,
+				5204F6DB2D549FEF00038001 /* Expense.swift in Sources */,
+				5204F6E02D549FF900038001 /* ContentView.swift in Sources */,
+				5204F6CD2D549D0400038001 /* ContentViewTemp.swift in Sources */,
 				5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */,
+				5204F6DF2D549FF900038001 /* AddExpenseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

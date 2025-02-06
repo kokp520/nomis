@@ -76,4 +76,8 @@ struct ExpenseRow: View {
                 .stroke(Color.green, lineWidth: 1)
         )
     }
-} 
+}
+
+#Preview {
+    ContentView()
+}
