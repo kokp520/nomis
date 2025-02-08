@@ -14,6 +14,14 @@
 		5204F6DB2D549FEF00038001 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6D92D549FEF00038001 /* Expense.swift */; };
 		5204F6DF2D549FF900038001 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6DC2D549FF900038001 /* AddExpenseView.swift */; };
 		5204F6E02D549FF900038001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6DD2D549FF900038001 /* ContentView.swift */; };
+		5262DB122D576060004D5156 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB112D576060004D5156 /* MainTabView.swift */; };
+		5262DB142D576067004D5156 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB132D576067004D5156 /* TransactionViewModel.swift */; };
+		5262DB162D576079004D5156 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB152D576079004D5156 /* Transaction.swift */; };
+		5262DB182D5760BD004D5156 /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB172D5760BD004D5156 /* AddTransactionView.swift */; };
+		5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB192D5760C1004D5156 /* BudgetView.swift */; };
+		5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1B2D5760C8004D5156 /* TransactionListView.swift */; };
+		5262DB1E2D5760C8004D5156 /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1C2D5760C8004D5156 /* OverviewView.swift */; };
+		5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1F2D5760D4004D5156 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +33,14 @@
 		5204F6D92D549FEF00038001 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		5204F6DC2D549FF900038001 /* AddExpenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
 		5204F6DD2D549FF900038001 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5262DB112D576060004D5156 /* MainTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		5262DB132D576067004D5156 /* TransactionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransactionViewModel.swift; path = nomis/ViewModels/TransactionViewModel.swift; sourceTree = SOURCE_ROOT; };
+		5262DB152D576079004D5156 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Transaction.swift; path = nomis/Models/Transaction.swift; sourceTree = SOURCE_ROOT; };
+		5262DB172D5760BD004D5156 /* AddTransactionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
+		5262DB192D5760C1004D5156 /* BudgetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		5262DB1B2D5760C8004D5156 /* TransactionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
+		5262DB1C2D5760C8004D5156 /* OverviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
+		5262DB1F2D5760D4004D5156 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +104,14 @@
 			children = (
 				5204F6DC2D549FF900038001 /* AddExpenseView.swift */,
 				5204F6DD2D549FF900038001 /* ContentView.swift */,
+				5262DB1F2D5760D4004D5156 /* SettingsView.swift */,
+				5262DB1C2D5760C8004D5156 /* OverviewView.swift */,
+				5262DB1B2D5760C8004D5156 /* TransactionListView.swift */,
+				5262DB192D5760C1004D5156 /* BudgetView.swift */,
+				5262DB172D5760BD004D5156 /* AddTransactionView.swift */,
+				5262DB152D576079004D5156 /* Transaction.swift */,
+				5262DB132D576067004D5156 /* TransactionViewModel.swift */,
+				5262DB112D576060004D5156 /* MainTabView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -162,11 +186,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5262DB182D5760BD004D5156 /* AddTransactionView.swift in Sources */,
 				5204F6DB2D549FEF00038001 /* Expense.swift in Sources */,
 				5204F6E02D549FF900038001 /* ContentView.swift in Sources */,
+				5262DB162D576079004D5156 /* Transaction.swift in Sources */,
 				5204F6CD2D549D0400038001 /* ContentViewTemp.swift in Sources */,
 				5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */,
 				5204F6DF2D549FF900038001 /* AddExpenseView.swift in Sources */,
+				5262DB1E2D5760C8004D5156 /* OverviewView.swift in Sources */,
+				5262DB122D576060004D5156 /* MainTabView.swift in Sources */,
+				5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */,
+				5262DB142D576067004D5156 /* TransactionViewModel.swift in Sources */,
+				5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */,
+				5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
