@@ -23,6 +23,7 @@ struct Transaction: Identifiable, Codable {
 enum TransactionType: String, Codable, CaseIterable {
     case income = "Income"
     case expense = "Expense"
+    case transfer = "Transfer"
 }
 
 enum Category: String, Codable, CaseIterable {

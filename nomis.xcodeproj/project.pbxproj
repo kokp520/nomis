@@ -22,6 +22,7 @@
 		5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1B2D5760C8004D5156 /* TransactionListView.swift */; };
 		5262DB1E2D5760C8004D5156 /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1C2D5760C8004D5156 /* OverviewView.swift */; };
 		5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1F2D5760D4004D5156 /* SettingsView.swift */; };
+		5262DB232D578380004D5156 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB212D578380004D5156 /* CommonViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		5262DB1B2D5760C8004D5156 /* TransactionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
 		5262DB1C2D5760C8004D5156 /* OverviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
 		5262DB1F2D5760D4004D5156 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5262DB212D578380004D5156 /* CommonViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,11 +111,20 @@
 				5262DB1B2D5760C8004D5156 /* TransactionListView.swift */,
 				5262DB192D5760C1004D5156 /* BudgetView.swift */,
 				5262DB172D5760BD004D5156 /* AddTransactionView.swift */,
+				5262DB222D578380004D5156 /* Components */,
 				5262DB152D576079004D5156 /* Transaction.swift */,
 				5262DB132D576067004D5156 /* TransactionViewModel.swift */,
 				5262DB112D576060004D5156 /* MainTabView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		5262DB222D578380004D5156 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				5262DB212D578380004D5156 /* CommonViews.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5262DB182D5760BD004D5156 /* AddTransactionView.swift in Sources */,
+				5262DB232D578380004D5156 /* CommonViews.swift in Sources */,
 				5204F6DB2D549FEF00038001 /* Expense.swift in Sources */,
 				5204F6E02D549FF900038001 /* ContentView.swift in Sources */,
 				5262DB162D576079004D5156 /* Transaction.swift in Sources */,

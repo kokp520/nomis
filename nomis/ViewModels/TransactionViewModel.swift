@@ -4,6 +4,7 @@ import SwiftUI
 class TransactionViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var selectedPeriod: DatePeriod = .month
+    @Published private var budgets: [Category: Double] = [:]
     
     enum DatePeriod {
         case week, month, year, all
@@ -19,6 +20,22 @@ class TransactionViewModel: ObservableObject {
     
     var balance: Double {
         totalIncome - totalExpenses
+    }
+    
+    struct CategoryExpense: Identifiable {
+        let category: Category
+        let amount: Double
+        var id: Category { category }
+    }
+    
+    var categoryExpenses: [CategoryExpense] {
+        Dictionary(grouping: transactions.filter { $0.type == .expense }) { $0.category }
+            .map { CategoryExpense(category: $0.key, amount: $0.value.reduce(0) { $0 + $1.amount }) }
+            .sorted { $0.amount > $1.amount }
+    }
+    
+    var recentTransactions: [Transaction] {
+        transactions.sorted { $0.date > $1.date }
     }
     
     func addTransaction(_ transaction: Transaction) {
@@ -51,11 +68,64 @@ class TransactionViewModel: ObservableObject {
         }
     }
     
+    func expenses(for category: Category) -> Double {
+        transactions
+            .filter { $0.type == .expense && $0.category == category }
+            .reduce(0) { $0 + $1.amount }
+    }
+    
+    func budget(for category: Category) -> Double? {
+        budgets[category]
+    }
+    
+    func setBudget(_ amount: Double, for category: Category) {
+        budgets[category] = amount
+        saveBudgets()
+    }
+    
+    func clearAllData() {
+        transactions = []
+        budgets = [:]
+        saveTransactions()
+        saveBudgets()
+    }
+    
+    func exportData() -> Data {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        let exportData = try? encoder.encode(transactions)
+        return exportData ?? Data()
+    }
+    
     private func saveTransactions() {
-        // TODO: Implement persistence
+        if let encoded = try? JSONEncoder().encode(transactions) {
+            UserDefaults.standard.set(encoded, forKey: "transactions")
+        }
     }
     
     private func loadTransactions() {
-        // TODO: Implement loading from persistence
+        if let data = UserDefaults.standard.data(forKey: "transactions"),
+           let decoded = try? JSONDecoder().decode([Transaction].self, from: data) {
+            transactions = decoded
+        }
+    }
+    
+    private func saveBudgets() {
+        if let encoded = try? JSONEncoder().encode(budgets) {
+            UserDefaults.standard.set(encoded, forKey: "budgets")
+        }
+    }
+    
+    private func loadBudgets() {
+        if let data = UserDefaults.standard.data(forKey: "budgets"),
+           let decoded = try? JSONDecoder().decode([Category: Double].self, from: data) {
+            budgets = decoded
+        }
+    }
+    
+    init() {
+        loadTransactions()
+        loadBudgets()
     }
 } 
