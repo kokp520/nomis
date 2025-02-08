@@ -11,7 +11,9 @@ import SwiftUI
 struct nomisApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationView {
+                ContentView()
+            }
         }
     }
 }

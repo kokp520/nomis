@@ -14,6 +14,8 @@
 		5204F6DB2D549FEF00038001 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6D92D549FEF00038001 /* Expense.swift */; };
 		5204F6DF2D549FF900038001 /* AddExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6DC2D549FF900038001 /* AddExpenseView.swift */; };
 		5204F6E02D549FF900038001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6DD2D549FF900038001 /* ContentView.swift */; };
+		52A0D63F2D54C11400FA83B2 /* ShareExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A0D63E2D54C11400FA83B2 /* ShareExpenseView.swift */; };
+		52A0D6412D54C11B00FA83B2 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A0D6402D54C11B00FA83B2 /* CloudKitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,9 @@
 		5204F6D92D549FEF00038001 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		5204F6DC2D549FF900038001 /* AddExpenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseView.swift; sourceTree = "<group>"; };
 		5204F6DD2D549FF900038001 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5262DB102D575D39004D5156 /* nomis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nomis.entitlements; sourceTree = "<group>"; };
+		52A0D63E2D54C11400FA83B2 /* ShareExpenseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareExpenseView.swift; sourceTree = "<group>"; };
+		52A0D6402D54C11B00FA83B2 /* CloudKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitManager.swift; path = nomis/Models/CloudKitManager.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +62,7 @@
 		5204F6C92D549D0400038001 /* nomis */ = {
 			isa = PBXGroup;
 			children = (
+				5262DB102D575D39004D5156 /* nomis.entitlements */,
 				5204F6DE2D549FF900038001 /* Views */,
 				5204F6DA2D549FEF00038001 /* Models */,
 				5204F6CA2D549D0400038001 /* nomisApp.swift */,
@@ -79,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				5204F6D92D549FEF00038001 /* Expense.swift */,
+				52A0D6402D54C11B00FA83B2 /* CloudKitManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -88,6 +95,7 @@
 			children = (
 				5204F6DC2D549FF900038001 /* AddExpenseView.swift */,
 				5204F6DD2D549FF900038001 /* ContentView.swift */,
+				52A0D63E2D54C11400FA83B2 /* ShareExpenseView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -163,8 +171,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5204F6DB2D549FEF00038001 /* Expense.swift in Sources */,
+				52A0D63F2D54C11400FA83B2 /* ShareExpenseView.swift in Sources */,
 				5204F6E02D549FF900038001 /* ContentView.swift in Sources */,
 				5204F6CD2D549D0400038001 /* ContentViewTemp.swift in Sources */,
+				52A0D6412D54C11B00FA83B2 /* CloudKitManager.swift in Sources */,
 				5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */,
 				5204F6DF2D549FF900038001 /* AddExpenseView.swift in Sources */,
 			);
@@ -297,6 +307,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nomis/nomis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nomis/Preview Content\"";
@@ -326,6 +337,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nomis/nomis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nomis/Preview Content\"";
