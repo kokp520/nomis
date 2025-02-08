@@ -27,42 +27,90 @@ private struct KeypadButton: View {
     let key: String
     let action: (String) -> Void
     let isEnter: Bool
+    let hasOperator: Bool
+    @State private var isPressed = false
     
-    init(key: String, action: @escaping (String) -> Void, isEnter: Bool = false) {
+    init(key: String, action: @escaping (String) -> Void, isEnter: Bool = false, hasOperator: Bool = false) {
         self.key = key
         self.action = action
         self.isEnter = isEnter
+        self.hasOperator = hasOperator
     }
     
     var body: some View {
-        Button(action: { action(key) }) {
-            if key == "⌫" {
-                Image(systemName: "delete.left")
-                    .font(.title2)
-            } else {
-                Text(key)
-                    .font(.title2)
+        Button(action: {
+            // 觸覺反饋
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            
+            withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+                isPressed = true
+            }
+            
+            // 延遲重置按壓狀態
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+                    isPressed = false
+                }
+            }
+            
+            action(key)
+        }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(backgroundColor)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.primary.opacity(0.1), lineWidth: 1)
+                    )
+                
+                if key == "⌫" {
+                    Image(systemName: "delete.left")
+                        .font(.title2)
+                } else {
+                    Text(key)
+                        .font(.title2)
+                        .fontWeight(isOperator ? .medium : .regular)
+                }
             }
         }
-        .frame(maxWidth: .infinity, minHeight: isEnter ? 124 : 60)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(backgroundColor)
-        }
-        .foregroundColor(.primary)
+        .frame(width: 80, height: isEnter ? 60 : 55)
+        .foregroundColor(foregroundColor)
+        .scaleEffect(isPressed ? 0.95 : 1.0)
+        .opacity(isPressed ? 0.8 : 1.0)
+        .animation(.spring(response: 0.2, dampingFraction: 0.6), value: isPressed)
         .buttonStyle(.plain)
-        .contentShape(Rectangle())
+    }
+    
+    private var isOperator: Bool {
+        ["÷", "×", "-", "+", "="].contains(key)
     }
     
     private var backgroundColor: Color {
-        if key == "⌫" {
-            return Color.blue.opacity(0.2)
-        } else if key == "↵" {
-            return Color.blue.opacity(0.3)
-        } else if ["÷", "×", "-", "+"].contains(key) {
-            return Color(.systemGray5)
+        if isPressed {
+            if key == "⌫" {
+                return Color(.systemGray4)
+            } else if isOperator {
+                return .blue.opacity(0.3)
+            } else {
+                return Color(.systemGray5)
+            }
         } else {
-            return Color(.systemGray6)
+            if key == "⌫" {
+                return Color(.systemGray5)
+            } else if isOperator {
+                return .blue.opacity(0.2)
+            } else {
+                return Color(.systemGray6)
+            }
+        }
+    }
+    
+    private var foregroundColor: Color {
+        if isOperator {
+            return isPressed ? .blue.opacity(0.8) : .blue
+        } else {
+            return isPressed ? .primary.opacity(0.8) : .primary
         }
     }
 }
@@ -70,6 +118,7 @@ private struct KeypadButton: View {
 // 數字鍵盤視圖
 private struct NumericKeypad: View {
     let onKeyPress: (String) -> Void
+    let hasOperator: Bool
     
     private let keys = [
         ["7", "8", "9", "÷"],
@@ -79,20 +128,39 @@ private struct NumericKeypad: View {
     ]
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 8) {
+            // 分隔線
+            Rectangle()
+                .fill(Color(.systemGray5))
+                .frame(height: 1)
+                .padding(.horizontal)
+            
+            // 拖動指示器
+            RoundedRectangle(cornerRadius: 2.5)
+                .fill(Color(.systemGray3))
+                .frame(width: 36, height: 5)
+                .padding(.vertical, 4)
+            
             ForEach(keys, id: \.self) { row in
-                HStack(spacing: 4) {
+                HStack(spacing: 8) {
                     ForEach(row, id: \.self) { key in
-                        KeypadButton(key: key, action: onKeyPress)
+                        KeypadButton(key: key, action: onKeyPress, hasOperator: hasOperator)
                     }
                 }
             }
-            // Enter 按鈕
-            KeypadButton(key: "↵", action: onKeyPress, isEnter: true)
+            // Enter/等號 按鈕
+            KeypadButton(
+                key: hasOperator ? "=" : "↵",
+                action: onKeyPress,
+                isEnter: true,
+                hasOperator: hasOperator
+            )
         }
-        .padding(.horizontal, 4)
-        .padding(.bottom)
+        .padding(.horizontal, 8)
+        .padding(.bottom, 8)
         .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
     }
 }
 
@@ -233,35 +301,54 @@ struct AddTransactionView: View {
     @FocusState private var isAmountFocused: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            HeaderView(dismiss: dismiss, onSave: saveTransaction)
-            
-            Picker("交易類型", selection: $type) {
-                Text("支出").tag(TransactionType.expense)
-                Text("收入").tag(TransactionType.income)
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                HeaderView(dismiss: dismiss, onSave: saveTransaction)
+                
+                Picker("交易類型", selection: $type) {
+                    Text("支出").tag(TransactionType.expense)
+                    Text("收入").tag(TransactionType.income)
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                
+                AmountDisplayView(amount: amount) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        showKeypad = true
+                        isAmountFocused = true
+                    }
+                }
+                
+                ScrollView {
+                    DetailInputView(category: $category, title: $title, note: $note, type: type)
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                showKeypad = false
+                                isAmountFocused = false
+                            }
+                        }
+                }
+                .padding(.bottom, showKeypad ? 300 : 0)
             }
-            .pickerStyle(.segmented)
-            .padding(.horizontal)
-            
-            AmountDisplayView(amount: amount) {
-                showKeypad = true
-                isAmountFocused = true
-            }
+            .background(Color(.systemGroupedBackground))
             
             if showKeypad {
-                NumericKeypad(onKeyPress: handleKeyPress)
-                    .transition(.move(edge: .bottom))
-            }
-            
-            ScrollView {
-                DetailInputView(category: $category, title: $title, note: $note, type: type)
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
                     .onTapGesture {
-                        showKeypad = false
-                        isAmountFocused = false
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                            showKeypad = false
+                            isAmountFocused = false
+                        }
                     }
+                
+                NumericKeypad(
+                    onKeyPress: handleKeyPress,
+                    hasOperator: amount.contains { ["÷", "×", "-", "+"].contains($0) }
+                )
+                .transition(.move(edge: .bottom))
             }
         }
-        .background(Color(.systemGroupedBackground))
         .alert("錯誤", isPresented: $showAlert) {
             Button("確定", role: .cancel) { }
         } message: {
@@ -271,9 +358,14 @@ struct AddTransactionView: View {
     
     private func handleKeyPress(_ key: String) {
         switch key {
-        case "↵":
-            showKeypad = false
-            isAmountFocused = false
+        case "↵", "=":
+            if key == "=" {
+                calculateResult()
+            }
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                showKeypad = false
+                isAmountFocused = false
+            }
         case "⌫":
             if !amount.isEmpty {
                 amount.removeLast()
@@ -281,8 +373,6 @@ struct AddTransactionView: View {
         case "C":
             amount = ""
             expression = ""
-        case "=":
-            calculateResult()
         case "+", "-", "×", "÷":
             if !amount.isEmpty && !amount.hasSuffix(" \(key) ") {
                 expression = amount
