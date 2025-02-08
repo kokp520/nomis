@@ -26,6 +26,13 @@ private struct HeaderView: View {
 private struct KeypadButton: View {
     let key: String
     let action: (String) -> Void
+    let isEnter: Bool
+    
+    init(key: String, action: @escaping (String) -> Void, isEnter: Bool = false) {
+        self.key = key
+        self.action = action
+        self.isEnter = isEnter
+    }
     
     var body: some View {
         Button(action: { action(key) }) {
@@ -37,9 +44,26 @@ private struct KeypadButton: View {
                     .font(.title2)
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 60)
-        .background(key == "⌫" ? Color.blue.opacity(0.2) : Color(.systemGray6))
+        .frame(maxWidth: .infinity, minHeight: isEnter ? 124 : 60)
+        .background {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(backgroundColor)
+        }
         .foregroundColor(.primary)
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+    }
+    
+    private var backgroundColor: Color {
+        if key == "⌫" {
+            return Color.blue.opacity(0.2)
+        } else if key == "↵" {
+            return Color.blue.opacity(0.3)
+        } else if ["÷", "×", "-", "+"].contains(key) {
+            return Color(.systemGray5)
+        } else {
+            return Color(.systemGray6)
+        }
     }
 }
 
@@ -48,18 +72,91 @@ private struct NumericKeypad: View {
     let onKeyPress: (String) -> Void
     
     private let keys = [
-        ["7", "8", "9", "+"],
-        ["4", "5", "6", "-"],
-        ["1", "2", "3", "×"],
-        ["0", ".", "÷", "⌫"]
+        ["7", "8", "9", "÷"],
+        ["4", "5", "6", "×"],
+        ["1", "2", "3", "-"],
+        [".", "0", "⌫", "+"]
     ]
     
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 4) {
             ForEach(keys, id: \.self) { row in
-                HStack(spacing: 2) {
+                HStack(spacing: 4) {
                     ForEach(row, id: \.self) { key in
                         KeypadButton(key: key, action: onKeyPress)
+                    }
+                }
+            }
+            // Enter 按鈕
+            KeypadButton(key: "↵", action: onKeyPress, isEnter: true)
+        }
+        .padding(.horizontal, 4)
+        .padding(.bottom)
+        .background(Color(.systemBackground))
+    }
+}
+
+// 金額顯示視圖
+private struct AmountDisplayView: View {
+    let amount: String
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button(action: onTap) {
+            HStack {
+                Text("TWD")
+                    .foregroundColor(.gray)
+                Spacer()
+                Text(amount.isEmpty ? "0" : amount)
+                    .font(.system(size: 40, weight: .regular))
+            }
+            .padding()
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+// 類別選擇器視圖
+private struct CategoryPickerView: View {
+    @Environment(\.dismiss) var dismiss
+    @Binding var selectedCategory: Category
+    let type: TransactionType
+    
+    var categories: [Category] {
+        switch type {
+        case .expense:
+            return [.food, .transport, .entertainment, .shopping, .other]
+        case .income:
+            return [.salary, .investment, .other]
+        default:
+            return []
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            List(categories, id: \.self) { category in
+                Button(action: {
+                    selectedCategory = category
+                    dismiss()
+                }) {
+                    HStack {
+                        Text(category.icon)
+                        Text(category.rawValue)
+                        Spacer()
+                        if category == selectedCategory {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("選擇類別")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("取消") {
+                        dismiss()
                     }
                 }
             }
@@ -67,27 +164,13 @@ private struct NumericKeypad: View {
     }
 }
 
-// 金額顯示視圖
-private struct AmountDisplayView: View {
-    let amount: String
-    
-    var body: some View {
-        HStack {
-            Text("TWD")
-                .foregroundColor(.gray)
-            Spacer()
-            Text(amount.isEmpty ? "0" : amount)
-                .font(.system(size: 40, weight: .regular))
-        }
-        .padding()
-    }
-}
-
 // 詳細資訊視圖
 private struct DetailInputView: View {
-    let category: Category
+    @Binding var category: Category
     @Binding var title: String
     @Binding var note: String
+    let type: TransactionType
+    @State private var showCategoryPicker = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -96,11 +179,14 @@ private struct DetailInputView: View {
                     .foregroundColor(.gray)
                 Spacer()
                 Button(action: {
-                    // TODO: 顯示類別選擇器
+                    showCategoryPicker = true
                 }) {
-                    Text(category.rawValue)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
+                    HStack {
+                        Text(category.icon)
+                        Text(category.rawValue)
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
                 }
             }
             .padding()
@@ -125,6 +211,9 @@ private struct DetailInputView: View {
             .background(Color(.systemBackground))
         }
         .padding(.vertical)
+        .sheet(isPresented: $showCategoryPicker) {
+            CategoryPickerView(selectedCategory: $category, type: type)
+        }
     }
 }
 
@@ -139,6 +228,9 @@ struct AddTransactionView: View {
     @State var type: TransactionType = .expense
     @State private var note = ""
     @State private var showAlert = false
+    @State private var showKeypad = false
+    @State private var expression = ""
+    @FocusState private var isAmountFocused: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -151,12 +243,22 @@ struct AddTransactionView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
             
-            AmountDisplayView(amount: amount)
+            AmountDisplayView(amount: amount) {
+                showKeypad = true
+                isAmountFocused = true
+            }
             
-            NumericKeypad(onKeyPress: handleKeyPress)
+            if showKeypad {
+                NumericKeypad(onKeyPress: handleKeyPress)
+                    .transition(.move(edge: .bottom))
+            }
             
             ScrollView {
-                DetailInputView(category: category, title: $title, note: $note)
+                DetailInputView(category: $category, title: $title, note: $note, type: type)
+                    .onTapGesture {
+                        showKeypad = false
+                        isAmountFocused = false
+                    }
             }
         }
         .background(Color(.systemGroupedBackground))
@@ -169,15 +271,26 @@ struct AddTransactionView: View {
     
     private func handleKeyPress(_ key: String) {
         switch key {
+        case "↵":
+            showKeypad = false
+            isAmountFocused = false
         case "⌫":
             if !amount.isEmpty {
                 amount.removeLast()
             }
+        case "C":
+            amount = ""
+            expression = ""
+        case "=":
+            calculateResult()
         case "+", "-", "×", "÷":
-            // TODO: 處理運算符號
-            break
+            if !amount.isEmpty && !amount.hasSuffix(" \(key) ") {
+                expression = amount
+                amount += " \(key) "
+            }
         case ".":
-            if !amount.contains(".") {
+            let components = amount.components(separatedBy: " ")
+            if let lastNumber = components.last, !lastNumber.contains(".") {
                 amount += key
             }
         default:
@@ -185,9 +298,30 @@ struct AddTransactionView: View {
         }
     }
     
+    private func calculateResult() {
+        let components = amount.components(separatedBy: " ")
+        guard components.count == 3,
+              let num1 = Double(components[0]),
+              let num2 = Double(components[2]) else {
+            return
+        }
+        
+        let result: Double
+        switch components[1] {
+        case "+": result = num1 + num2
+        case "-": result = num1 - num2
+        case "×": result = num1 * num2
+        case "÷": result = num2 != 0 ? num1 / num2 : 0
+        default: return
+        }
+        
+        amount = String(format: "%.2f", result)
+        expression = ""
+    }
+    
     private func saveTransaction() {
         guard !title.isEmpty,
-              let amountValue = Double(amount),
+              let amountValue = Double(amount.components(separatedBy: " ").first ?? ""),
               amountValue > 0 else {
             showAlert = true
             return
