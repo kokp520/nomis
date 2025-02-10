@@ -13,7 +13,7 @@ struct CardView<Content: View>: View {
             .background(Color(.systemBackground))
             .cornerRadius(15)
             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-            .padding(.horizontal)
+            // .padding(.horizontal)
     }
 }
 
@@ -30,29 +30,30 @@ struct TransactionRowView: View {
                         .frame(width: 50, height: 50)
                     
                     Text(transaction.category.icon)
-                        .font(.title2)
+                        .font(.title)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(transaction.title)
-                        .font(.headline)
-                    Text(transaction.category.rawValue)
                         .font(.subheadline)
+                    Text(transaction.category.rawValue)
+                        .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text(String(format: "%.0f", transaction.amount))
-                        .font(.headline)
+                    Text(String(format: "$%.0f", transaction.amount))
+                        .font(.callout)
                         .foregroundColor(transaction.type == .income ? .green : .red)
                     Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 1)
+        // .padding(.horizontal)
     }
 } 

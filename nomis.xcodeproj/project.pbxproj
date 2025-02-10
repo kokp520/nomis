@@ -21,6 +21,7 @@
 		5262DB1E2D5760C8004D5156 /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1C2D5760C8004D5156 /* OverviewView.swift */; };
 		5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1F2D5760D4004D5156 /* SettingsView.swift */; };
 		5262DB232D578380004D5156 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB212D578380004D5156 /* CommonViews.swift */; };
+		5262DB262D59E22C004D5156 /* Baskic8.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5262DB252D59E22C004D5156 /* Baskic8.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		5262DB1C2D5760C8004D5156 /* OverviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
 		5262DB1F2D5760D4004D5156 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5262DB212D578380004D5156 /* CommonViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
+		5262DB252D59E22C004D5156 /* Baskic8.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Baskic8.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		5204F6C92D549D0400038001 /* nomis */ = {
 			isa = PBXGroup;
 			children = (
+				5262DB242D59E1F9004D5156 /* Fonts */,
 				5204F6DE2D549FF900038001 /* Views */,
 				5204F6DA2D549FEF00038001 /* Models */,
 				5204F6CA2D549D0400038001 /* nomisApp.swift */,
@@ -119,6 +122,14 @@
 				5262DB212D578380004D5156 /* CommonViews.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		5262DB242D59E1F9004D5156 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				5262DB252D59E22C004D5156 /* Baskic8.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,6 +192,7 @@
 			files = (
 				5204F6D22D549D1000038001 /* Preview Assets.xcassets in Resources */,
 				5204F6CF2D549D1000038001 /* Assets.xcassets in Resources */,
+				5262DB262D59E22C004D5156 /* Baskic8.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

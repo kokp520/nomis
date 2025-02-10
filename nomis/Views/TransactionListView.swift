@@ -4,6 +4,13 @@ struct TransactionListView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
     @State private var searchText = ""
     
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy年MM月"
+        formatter.locale = Locale(identifier: "zh_TW")
+        return formatter
+    }()
+    
     var filteredTransactions: [Transaction] {
         let periodFilteredTransactions = viewModel.filterTransactions(for: viewModel.selectedPeriod)
         if searchText.isEmpty {
@@ -28,16 +35,30 @@ struct TransactionListView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding()
+
+                    // group by year and month
+                    let groupedTransactions = Dictionary(grouping: filteredTransactions) { transaction in
+                        let components = Calendar.current.dateComponents([.year, .month], from: transaction.date)
+                        return Calendar.current.date(from: components)!
+                    }
+                    ForEach(groupedTransactions.keys.sorted().reversed(), id: \.self){ date in 
+                        Text(dateFormatter.string(from: date))
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 4)
+                            .padding(.horizontal)
                     
-                    ForEach(filteredTransactions) { transaction in
-                        TransactionRowView(transaction: transaction)
-                            .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
-                                    viewModel.deleteTransaction(transaction)
-                                } label: {
-                                    Label("刪除", systemImage: "trash")
+                        ForEach(groupedTransactions[date] ?? []) { transaction in
+                            TransactionRowView(transaction: transaction)
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        viewModel.deleteTransaction(transaction)
+                                    } label: {
+                                        Label("刪除", systemImage: "trash")
+                                    }
                                 }
-                            }
+                                .padding(.horizontal)
+                        }
                     }
                 }
             }
