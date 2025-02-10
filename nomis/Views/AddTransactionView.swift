@@ -117,7 +117,7 @@ private struct NumericKeypad: View {
         ["7", "8", "9", "÷"],
         ["4", "5", "6", "×"],
         ["1", "2", "3", "-"],
-        [".", "0", "⌫", "+"]
+        ["0", "00", "⌫", "+"]
     ]
     
     var body: some View {
@@ -621,23 +621,29 @@ struct AddTransactionView: View {
             amount = ""
             expression = ""
         case "+", "-", "×", "÷":
-            if !amount.isEmpty && !amount.hasSuffix(" \(key) ") {
-                expression = amount
+            if !amount.isEmpty && !amount.hasSuffix(" ") {
+                // 如果已經有運算符號，先計算前面的結果
+                if amount.contains(" ") {
+                    calculateResult()
+                }
                 amount += " \(key) "
             }
-        case ".":
-            let components = amount.components(separatedBy: " ")
-            if let lastNumber = components.last, !lastNumber.contains(".") {
+        case "00":
+            if !amount.isEmpty && !amount.hasSuffix(" ") {
                 amount += key
             }
         default:
-            amount += key
+            if amount.hasSuffix(" ") {
+                amount += key
+            } else {
+                amount += key
+            }
         }
     }
     
     private func calculateResult() {
         let components = amount.components(separatedBy: " ")
-        guard components.count == 3,
+        guard components.count >= 3,
               let num1 = Double(components[0]),
               let num2 = Double(components[2])
         else {
@@ -653,7 +659,8 @@ struct AddTransactionView: View {
         default: return
         }
         
-        amount = String(format: "%.2f", result)
+        // 四捨五入到整數
+        amount = String(format: "%.0f", round(result))
         expression = ""
     }
     
@@ -666,9 +673,12 @@ struct AddTransactionView: View {
             return
         }
         
+        // 儲存時也進行四捨五入
+        let roundedAmount = round(amountValue)
+        
         let transaction = Transaction(
             title: title,
-            amount: amountValue,
+            amount: roundedAmount,
             date: selectedDate,
             category: category,
             type: type,
