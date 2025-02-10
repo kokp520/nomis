@@ -30,16 +30,8 @@ private struct KeypadButton: View {
     let hasOperator: Bool
     @State private var isPressed = false
     
-    init(key: String, action: @escaping (String) -> Void, isEnter: Bool = false, hasOperator: Bool = false) {
-        self.key = key
-        self.action = action
-        self.isEnter = isEnter
-        self.hasOperator = hasOperator
-    }
-    
     var body: some View {
         Button(action: {
-            // 觸覺反饋
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
             
@@ -47,7 +39,6 @@ private struct KeypadButton: View {
                 isPressed = true
             }
             
-            // 延遲重置按壓狀態
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
                     isPressed = false
@@ -57,24 +48,24 @@ private struct KeypadButton: View {
             action(key)
         }) {
             ZStack {
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 16)
                     .fill(backgroundColor)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.primary.opacity(0.1), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.primary.opacity(0.05), lineWidth: 1)
                     )
+                    .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
                 
                 if key == "⌫" {
-                    Image(systemName: "delete.left")
+                    Image(systemName: "delete.left.fill")
                         .font(.title2)
                 } else {
                     Text(key)
-                        .font(.title2)
-                        .fontWeight(isOperator ? .medium : .regular)
+                        .font(.system(size: isOperator ? 24 : 28, weight: isOperator ? .medium : .regular))
                 }
             }
         }
-        .frame(width: 80, height: isEnter ? 60 : 55)
+        .frame(width: 75, height: isEnter ? 65 : 60)
         .foregroundColor(foregroundColor)
         .scaleEffect(isPressed ? 0.95 : 1.0)
         .opacity(isPressed ? 0.8 : 1.0)
@@ -91,7 +82,7 @@ private struct KeypadButton: View {
             if key == "⌫" {
                 return Color(.systemGray4)
             } else if isOperator {
-                return .blue.opacity(0.3)
+                return .blue.opacity(0.25)
             } else {
                 return Color(.systemGray5)
             }
@@ -99,7 +90,7 @@ private struct KeypadButton: View {
             if key == "⌫" {
                 return Color(.systemGray5)
             } else if isOperator {
-                return .blue.opacity(0.2)
+                return .blue.opacity(0.15)
             } else {
                 return Color(.systemGray6)
             }
@@ -108,9 +99,11 @@ private struct KeypadButton: View {
     
     private var foregroundColor: Color {
         if isOperator {
-            return isPressed ? .blue.opacity(0.8) : .blue
+            return .blue
+        } else if key == "⌫" {
+            return .red.opacity(0.8)
         } else {
-            return isPressed ? .primary.opacity(0.8) : .primary
+            return .primary
         }
     }
 }
@@ -128,27 +121,25 @@ private struct NumericKeypad: View {
     ]
     
     var body: some View {
-        VStack(spacing: 8) {
-            // 分隔線
+        VStack(spacing: 12) {
             Rectangle()
                 .fill(Color(.systemGray5))
                 .frame(height: 1)
                 .padding(.horizontal)
             
-            // 拖動指示器
             RoundedRectangle(cornerRadius: 2.5)
                 .fill(Color(.systemGray3))
                 .frame(width: 36, height: 5)
                 .padding(.vertical, 4)
             
             ForEach(keys, id: \.self) { row in
-                HStack(spacing: 8) {
+                HStack(spacing: 12) {
                     ForEach(row, id: \.self) { key in
-                        KeypadButton(key: key, action: onKeyPress, hasOperator: hasOperator)
+                        KeypadButton(key: key, action: onKeyPress, isEnter: false, hasOperator: hasOperator)
                     }
                 }
             }
-            // Enter/等號 按鈕
+            
             KeypadButton(
                 key: hasOperator ? "=" : "↵",
                 action: onKeyPress,
@@ -156,11 +147,13 @@ private struct NumericKeypad: View {
                 hasOperator: hasOperator
             )
         }
-        .padding(.horizontal, 8)
-        .padding(.bottom, 8)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
+        .padding(.horizontal, 12)
+        .padding(.bottom, 12)
+        .background(
+            Color(.systemBackground)
+                .shadow(color: .black.opacity(0.15), radius: 15, x: 0, y: -5)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 }
 
@@ -176,15 +169,22 @@ private struct AmountDisplayView: View {
             Button(action: onTap) {
                 HStack {
                     Text("TWD")
-                        .foregroundColor(.adaptiveText)
-                        .font(.system(size: 40))
+                        .foregroundColor(.adaptiveSecondaryText)
+                        .font(.system(size: 24))
                         .bold()
                     Spacer()
                     Text(amount.isEmpty ? "0" : amount)
-                        .font(.system(size: 40, weight: .regular))
+                        .font(.system(size: 48, weight: .medium))
                         .foregroundColor(.adaptiveText)
+                        .minimumScaleFactor(0.5)
                 }
                 .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.adaptiveBackground)
+                        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+                )
+                .padding(.horizontal)
             }
             .buttonStyle(.plain)
             
@@ -197,12 +197,20 @@ private struct AmountDisplayView: View {
                     showDatePicker.toggle()
                 }) {
                     HStack(spacing: 4) {
+                        Image(systemName: "calendar")
+                            .foregroundColor(.blue)
                         Text(formatDate(selectedDate))
                             .foregroundColor(.adaptiveSecondaryText)
                         Image(systemName: "chevron.down")
                             .foregroundColor(.adaptiveSecondaryText)
                             .font(.system(size: 12))
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(Color.blue.opacity(0.1))
+                    )
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 8)
@@ -277,47 +285,76 @@ private struct CategoryPickerView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // 類別網格
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
+            HStack {
+                Text("選擇類別")
+                    .font(.headline)
+                Spacer()
+                Button("完成") {
+                    dismiss()
+                }
+                .foregroundColor(.blue)
+            }
+            .padding()
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 4), spacing: 16) {
                 ForEach(categories, id: \.self) { category in
                     Button(action: {
-                        selectedCategory = category
-                        dismiss()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            selectedCategory = category
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            dismiss()
+                        }
                     }) {
-                        VStack(spacing: 8) {
+                        VStack(spacing: 12) {
                             ZStack {
                                 Circle()
-                                    .fill(category == selectedCategory ? Color.blue.opacity(0.2) : Color.adaptiveBackground)
-                                    .frame(width: 60, height: 60)
+                                    .fill(category == selectedCategory ? 
+                                        Color.blue.opacity(0.15) : 
+                                        Color.adaptiveBackground)
+                                    .frame(width: 70, height: 70)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(category == selectedCategory ?
+                                                Color.blue.opacity(0.3) :
+                                                Color.primary.opacity(0.1),
+                                                lineWidth: 1)
+                                    )
+                                    .shadow(color: .black.opacity(0.05),
+                                        radius: 4, x: 0, y: 2)
                                 
                                 Text(category.icon)
-                                    .font(.title2)
+                                    .font(.system(size: 32))
                             }
+                            .scaleEffect(category == selectedCategory ? 1.1 : 1.0)
                             
                             Text(category.rawValue)
-                                .font(.caption)
-                                .foregroundColor(.adaptiveText)
+                                .font(.system(size: 14))
+                                .foregroundColor(category == selectedCategory ?
+                                    .blue : .adaptiveText)
                         }
                     }
+                    .buttonStyle(.plain)
                 }
             }
             .padding()
             
-            // 取消按鈕
             Button(action: {
                 dismiss()
             }) {
                 Text("取消")
-                    .foregroundColor(.adaptiveText)
+                    .foregroundColor(.red)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.adaptiveBackground)
-                    .cornerRadius(12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.red.opacity(0.1))
+                    )
             }
             .padding()
         }
         .background(Color.adaptiveGroupedBackground)
-        .presentationDetents([.height(300)])
+        .presentationDetents([.height(380)])
     }
 }
 
@@ -330,54 +367,93 @@ private struct DetailInputView: View {
     @State private var showCategoryPicker = false
     @State private var isEditingTitle = false
     @EnvironmentObject var viewModel: TransactionViewModel
+    @Environment(\.colorScheme) var colorScheme
+    
+    private var cardBackground: Color {
+        colorScheme == .dark ? Color(.systemGray6) : .white
+    }
+    
+    private var inputBackground: Color {
+        colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray6)
+    }
     
     var body: some View {
         VStack(spacing: 16) {
-            HStack {
-                Text("類別")
-                    .foregroundColor(.adaptiveText)
-                    .frame(width: 60, alignment: .leading)
-                Spacer()
+            // 類別選擇
+            VStack(spacing: 0) {
                 Button(action: {
                     showCategoryPicker = true
                 }) {
-                    HStack {
-                        Text(category.rawValue)
-                            .foregroundColor(.adaptiveText)
+                    HStack(alignment: .center) {
+                        Text("類別")
+                            .foregroundColor(.adaptiveSecondaryText)
+                            .frame(width: 60, alignment: .leading)
+                        
+                        HStack(spacing: 8) {
+                            Text(category.icon)
+                                .font(.title3)
+                            Text(category.rawValue)
+                                .foregroundColor(.adaptiveText)
+                        }
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 12)
+                        .background(
+                            Capsule()
+                                .fill(colorScheme == .dark ? 
+                                    Color.blue.opacity(0.2) : 
+                                    Color.blue.opacity(0.1))
+                        )
+                        
                         Spacer()
-                        Text(category.icon)
-                            .foregroundColor(.adaptiveText)
+                        
                         Image(systemName: "chevron.right")
+                            .font(.system(size: 14))
                             .foregroundColor(.adaptiveSecondaryText)
                     }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal)
+                    .background(cardBackground)
                 }
             }
-            .padding()
-            .background(Color.adaptiveBackground)
+            .background(cardBackground)
+            .cornerRadius(12)
+            .shadow(color: colorScheme == .dark ? .clear : .black.opacity(0.05),
+                   radius: 4, x: 0, y: 2)
             .sheet(isPresented: $showCategoryPicker) {
                 CategoryPickerView(selectedCategory: $category, title: $title, type: type)
             }
             
+            // 名稱輸入
             VStack(spacing: 0) {
-                HStack {
+                HStack(alignment: .center) {
                     Text("名稱")
-                        .foregroundColor(.adaptiveText)
+                        .foregroundColor(.adaptiveSecondaryText)
                         .frame(width: 60, alignment: .leading)
+                    
                     TextField("點擊以編輯", text: $title, onEditingChanged: { editing in
                         isEditingTitle = editing
                     })
-                        .multilineTextAlignment(.leading)
-                        .foregroundColor(title.isEmpty ? .adaptiveSecondaryText : .adaptiveText)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(isEditingTitle ? inputBackground : .clear)
+                    )
+                    .foregroundColor(title.isEmpty ? .adaptiveSecondaryText : .adaptiveText)
                 }
-                .padding()
-                .background(Color.adaptiveBackground)
+                .padding(.vertical, 12)
+                .padding(.horizontal)
+                .background(cardBackground)
                 
                 if isEditingTitle {
-                    VStack(spacing: 8) {
+                    Divider()
+                        .padding(.horizontal)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("最近使用")
-                            .font(.caption)
+                            .font(.footnote)
                             .foregroundColor(.adaptiveSecondaryText)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
                             .padding(.top, 8)
                         
@@ -390,7 +466,7 @@ private struct DetailInputView: View {
                                             title = historyTitle
                                             isEditingTitle = false
                                         }) {
-                                            HStack(spacing: 4) {
+                                            HStack(spacing: 6) {
                                                 Text(category.icon)
                                                     .font(.subheadline)
                                                 Text(historyTitle)
@@ -398,32 +474,58 @@ private struct DetailInputView: View {
                                             }
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 8)
-                                            .background(Color(.systemGray5))
-                                            .cornerRadius(16)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(colorScheme == .dark ? 
+                                                        Color.blue.opacity(0.2) : 
+                                                        Color.blue.opacity(0.1))
+                                            )
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                            )
                                         }
-                                        .foregroundColor(.adaptiveText)
+                                        .foregroundColor(.blue)
                                     }
                                 }
                                 .padding(.horizontal)
+                                .padding(.bottom, 12)
                             }
                         }
                     }
-                    .background(Color.adaptiveBackground.opacity(0.5))
+                    .background(cardBackground)
                 }
             }
+            .background(cardBackground)
+            .cornerRadius(12)
+            .shadow(color: colorScheme == .dark ? .clear : .black.opacity(0.05),
+                   radius: 4, x: 0, y: 2)
             
-            HStack {
+            // 備忘錄輸入
+            HStack(alignment: .center) {
                 Text("備忘錄")
-                    .foregroundColor(.adaptiveText)
+                    .foregroundColor(.adaptiveSecondaryText)
                     .frame(width: 60, alignment: .leading)
+                
                 TextField("點擊以編輯", text: $note)
-                    .multilineTextAlignment(.leading)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(note.isEmpty ? .clear : inputBackground)
+                    )
                     .foregroundColor(note.isEmpty ? .adaptiveSecondaryText : .adaptiveText)
             }
-            .padding()
-            .background(Color.adaptiveBackground)
+            .padding(.vertical, 12)
+            .padding(.horizontal)
+            .background(cardBackground)
+            .cornerRadius(12)
+            .shadow(color: colorScheme == .dark ? .clear : .black.opacity(0.05),
+                   radius: 4, x: 0, y: 2)
         }
-        .padding(.vertical)
+        .padding(.horizontal)
+        .padding(.vertical, 8)
     }
 }
 
