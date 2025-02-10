@@ -4,6 +4,7 @@ struct MainTabView: View {
     @StateObject private var viewModel = TransactionViewModel()
     @State private var showAddTransaction = false
     @State private var selectedTab = 0
+    @State private var transactionType: TransactionType = .expense
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -48,8 +49,19 @@ struct MainTabView: View {
             }
         }
         .sheet(isPresented: $showAddTransaction) {
-            AddTransactionView()
-                .environmentObject(viewModel)
+            NavigationView {
+                VStack {
+                    Picker("交易類型", selection: $transactionType) {
+                        Text("支出").tag(TransactionType.expense)
+                        Text("收入").tag(TransactionType.income)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding()
+                    
+                    AddTransactionView(isPresented: $showAddTransaction, type: transactionType)
+                        .environmentObject(viewModel)
+                }
+            }
         }
     }
 } 

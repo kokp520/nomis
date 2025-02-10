@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CardView<Content: View>: View {
     let content: Content
+    @Environment(\.colorScheme) var colorScheme
     
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
@@ -10,10 +11,9 @@ struct CardView<Content: View>: View {
     var body: some View {
         content
             .padding()
-            .background(Color(.systemBackground))
+            .background(colorScheme == .dark ? Color(.systemGray6) : Color.adaptiveBackground)
             .cornerRadius(15)
-            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-            // .padding(.horizontal)
+            .shadow(color: colorScheme == .dark ? Color.black.opacity(0.3) : Color.primary.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
 
@@ -36,9 +36,10 @@ struct TransactionRowView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(transaction.title)
                         .font(.subheadline)
+                        .foregroundColor(.adaptiveText)
                     Text(transaction.category.rawValue)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.adaptiveSecondaryText)
                 }
                 
                 Spacer()
@@ -49,11 +50,10 @@ struct TransactionRowView: View {
                         .foregroundColor(transaction.type == .income ? .green : .red)
                     Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.adaptiveSecondaryText)
                 }
             }
         }
         .padding(.vertical, 1)
-        // .padding(.horizontal)
     }
 } 

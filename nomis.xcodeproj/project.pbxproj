@@ -22,6 +22,7 @@
 		5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1F2D5760D4004D5156 /* SettingsView.swift */; };
 		5262DB232D578380004D5156 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB212D578380004D5156 /* CommonViews.swift */; };
 		5262DB262D59E22C004D5156 /* Baskic8.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5262DB252D59E22C004D5156 /* Baskic8.otf */; };
+		5262DB282D59EFC2004D5156 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB272D59EFC2004D5156 /* ColorExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		5262DB1F2D5760D4004D5156 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5262DB212D578380004D5156 /* CommonViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
 		5262DB252D59E22C004D5156 /* Baskic8.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Baskic8.otf; sourceTree = "<group>"; };
+		5262DB272D59EFC2004D5156 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorExtension.swift; path = nomis/Extensions/ColorExtension.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				5262DB1B2D5760C8004D5156 /* TransactionListView.swift */,
 				5262DB192D5760C1004D5156 /* BudgetView.swift */,
 				5262DB172D5760BD004D5156 /* AddTransactionView.swift */,
+				5262DB272D59EFC2004D5156 /* ColorExtension.swift */,
 				5262DB222D578380004D5156 /* Components */,
 				5262DB152D576079004D5156 /* Transaction.swift */,
 				5262DB132D576067004D5156 /* TransactionViewModel.swift */,
@@ -215,6 +218,7 @@
 				5262DB142D576067004D5156 /* TransactionViewModel.swift in Sources */,
 				5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */,
 				5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */,
+				5262DB282D59EFC2004D5156 /* ColorExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

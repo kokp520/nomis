@@ -54,7 +54,7 @@ class TransactionViewModel: ObservableObject {
         let calendar = Calendar.current
         let now = Date()
         
-        return transactions.filter { transaction in
+        let filtered = transactions.filter { transaction in
             switch period {
             case .week:
                 return calendar.isDate(transaction.date, equalTo: now, toGranularity: .weekOfYear)
@@ -66,6 +66,8 @@ class TransactionViewModel: ObservableObject {
                 return true
             }
         }
+        
+        return filtered.sorted { $0.date > $1.date }
     }
     
     func expenses(for category: Category) -> Double {
@@ -122,6 +124,15 @@ class TransactionViewModel: ObservableObject {
            let decoded = try? JSONDecoder().decode([Category: Double].self, from: data) {
             budgets = decoded
         }
+    }
+    
+    // 獲取特定類別最近的5筆記錄標題
+    func getRecentTitles(for category: Category) -> [String] {
+        let filteredTransactions = transactions
+            .filter { $0.category == category }
+            .sorted { $0.date > $1.date }
+        
+        return Array(Set(filteredTransactions.prefix(5).map { $0.title }))
     }
     
     init() {
