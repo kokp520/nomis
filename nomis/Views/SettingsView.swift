@@ -42,7 +42,7 @@ struct SettingsView: View {
             }
             .navigationTitle("設定")
             .alert("確定要清除所有資料？", isPresented: $showingDeleteAlert) {
-                Button("取消", role: .cancel) { }
+                Button("取消", role: .cancel) {}
                 Button("清除", role: .destructive) {
                     viewModel.clearAllData()
                 }
@@ -75,4 +75,4 @@ struct ShareSheet: UIViewControllerRepresentable {
     SettingsView()
         .environmentObject(TransactionViewModel())
         .preferredColorScheme(.dark)
-} 
+}

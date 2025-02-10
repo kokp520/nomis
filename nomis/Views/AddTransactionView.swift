@@ -350,7 +350,7 @@ struct AddTransactionView: View {
             }
         }
         .alert("錯誤", isPresented: $showAlert) {
-            Button("確定", role: .cancel) { }
+            Button("確定", role: .cancel) {}
         } message: {
             Text("請填寫標題和有效的金額")
         }
@@ -392,7 +392,8 @@ struct AddTransactionView: View {
         let components = amount.components(separatedBy: " ")
         guard components.count == 3,
               let num1 = Double(components[0]),
-              let num2 = Double(components[2]) else {
+              let num2 = Double(components[2])
+        else {
             return
         }
         
@@ -412,7 +413,8 @@ struct AddTransactionView: View {
     private func saveTransaction() {
         guard !title.isEmpty,
               let amountValue = Double(amount.components(separatedBy: " ").first ?? ""),
-              amountValue > 0 else {
+              amountValue > 0
+        else {
             showAlert = true
             return
         }
@@ -442,4 +444,4 @@ struct AddTransactionView: View {
     view.category = .salary
     return view
         .environmentObject(TransactionViewModel())
-} 
+}

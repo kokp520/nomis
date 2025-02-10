@@ -1,5 +1,5 @@
-import SwiftUI
 import Charts
+import SwiftUI
 
 struct OverviewView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
