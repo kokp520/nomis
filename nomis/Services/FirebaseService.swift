@@ -1,12 +1,12 @@
-import Foundation
+import AuthenticationServices
+import CryptoKit
+import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
-import FirebaseAuth
-import AuthenticationServices
+import Foundation
+import ObjectiveC
 import SwiftUI
 import UIKit
-import ObjectiveC
-import CryptoKit
 
 extension Notification.Name {
     static let groupDidChange = Notification.Name("groupDidChange")
@@ -61,6 +61,7 @@ public class FirebaseService: ObservableObject {
     }
     
     // MARK: - 認證相關
+
     public func signInWithApple() async throws {
         let nonce = randomNonceString()
         currentNonce = nonce
@@ -91,15 +92,15 @@ public class FirebaseService: ObservableObject {
             let user = authResult.user
             
             // 更新用戶資料
-            self.currentUser = User(
+            currentUser = User(
                 id: user.uid,
                 name: user.displayName ?? "",
                 email: user.email ?? ""
             )
-            self.isAuthenticated = true
+            isAuthenticated = true
             
             // 儲存用戶資料到 Firestore
-            try await saveUserToFirestore(user: self.currentUser!)
+            try await saveUserToFirestore(user: currentUser!)
         }
     }
     
@@ -112,6 +113,7 @@ public class FirebaseService: ObservableObject {
     }
     
     // MARK: - 群組相關
+
     public func createGroup(name: String) async throws {
         guard let user = currentUser else {
             throw NSError(domain: "FirebaseService", code: -1, userInfo: [NSLocalizedDescriptionKey: "用戶未登入"])
@@ -138,11 +140,12 @@ public class FirebaseService: ObservableObject {
             .whereField("members", arrayContains: user.id)
             .getDocuments()
         
-        self.groups = snapshot.documents.compactMap { doc -> Group? in
+        groups = snapshot.documents.compactMap { doc -> Group? in
             let data = doc.data()
             guard let name = data["name"] as? String,
                   let owner = data["owner"] as? String,
-                  let members = data["members"] as? [String] else {
+                  let members = data["members"] as? [String]
+            else {
                 return nil
             }
             return Group(id: doc.documentID, name: name, owner: owner, members: members)
@@ -179,6 +182,7 @@ public class FirebaseService: ObservableObject {
     }
     
     // MARK: - 交易相關
+
     public func addTransaction(_ transaction: Transaction, groupID: String) async throws {
         let transactionRef = db.collection("groups").document(groupID).collection("transactions").document()
         
@@ -262,7 +266,8 @@ public class FirebaseService: ObservableObject {
         guard let data = document.data(),
               let name = data["name"] as? String,
               let email = data["email"] as? String,
-              let id = data["id"] as? String else {
+              let id = data["id"] as? String
+        else {
             throw NSError(domain: "FirebaseService", code: 404, userInfo: [NSLocalizedDescriptionKey: "User not found"])
         }
         return User(id: id, name: name, email: email)
@@ -270,8 +275,8 @@ public class FirebaseService: ObservableObject {
 }
 
 #if DEBUG
-extension FirebaseService {
-    public static var preview: FirebaseService {
+public extension FirebaseService {
+    static var preview: FirebaseService {
         let service = FirebaseService()
         service.selectedGroup = Group(id: "preview", name: "預覽群組", owner: "preview", members: ["preview"])
         return service
@@ -294,4 +299,4 @@ private class AuthorizationControllerDelegate: NSObject, ASAuthorizationControll
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         continuation.resume(throwing: error)
     }
-} 
+}

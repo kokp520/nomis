@@ -6,7 +6,7 @@ struct Expense: Identifiable {
     let amount: Double
     let date: Date
     let category: Category
-    
+
     enum Category: String, CaseIterable {
         case food = "Food"
         case transport = "Transport"
@@ -14,4 +14,4 @@ struct Expense: Identifiable {
         case shopping = "Shopping"
         case other = "Other"
     }
-} 
+}

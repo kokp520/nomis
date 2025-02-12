@@ -1,8 +1,8 @@
-import SwiftUI
 import AuthenticationServices
+import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var authViewModel = AuthViewModel()
+    @EnvironmentObject private var authViewModel: AuthViewModel
     @State private var email = ""
     @State private var password = ""
     @State private var name = ""
@@ -56,19 +56,21 @@ struct LoginView: View {
                         .cornerRadius(10)
                 }
                 
-                Button(action: {
-                    authViewModel.prepareSignInWithApple()
-                }) {
-                    HStack {
-                        Image(systemName: "apple.logo")
-                            .foregroundColor(.white)
-                        Text("使用 Apple 登入")
-                            .foregroundColor(.white)
+                if !isSignUp {
+                    Button(action: {
+                        authViewModel.prepareSignInWithApple()
+                    }) {
+                        HStack {
+                            Image(systemName: "apple.logo")
+                                .foregroundColor(.white)
+                            Text("使用 Apple 登入")
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(10)
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.black)
-                    .cornerRadius(10)
                 }
                 
                 Button(action: {
@@ -86,9 +88,11 @@ struct LoginView: View {
 #Preview {
     LoginView()
         .preferredColorScheme(.light)
+        .environmentObject(AuthViewModel())
 }
 
 #Preview("深色模式") {
     LoginView()
         .preferredColorScheme(.dark)
-} 
+        .environmentObject(AuthViewModel())
+}

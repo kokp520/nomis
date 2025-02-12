@@ -8,7 +8,7 @@ public struct Transaction: Identifiable, Codable {
     public var category: Category
     public var type: TransactionType
     public var note: String?
-    
+
     public init(id: String = UUID().uuidString, title: String, amount: Double, date: Date = Date(), category: Category, type: TransactionType, note: String? = nil) {
         self.id = id
         self.title = title
@@ -18,4 +18,4 @@ public struct Transaction: Identifiable, Codable {
         self.type = type
         self.note = note
     }
-} 
+}

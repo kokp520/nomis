@@ -17,6 +17,10 @@ struct nomisApp: App {
     
     init() {
         FirebaseApp.configure()
+
+        // cannel jump up login view, if user is already logged in
+//         authViewModel.checkAuthenticationStatus()
+//        authViewModel.setupAuthStateListener()
         
         // 暫時註解掉模擬器設定，先使用實際的 Firebase
         /*

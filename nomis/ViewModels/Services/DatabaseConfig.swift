@@ -1,3 +1,4 @@
+/*
 import Foundation
 
 enum AppEnvironment {
@@ -37,3 +38,4 @@ class DatabaseConfig {
     
     private init() {}
 } 
+*/

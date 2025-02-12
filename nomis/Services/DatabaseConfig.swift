@@ -19,7 +19,8 @@ public class DatabaseConfig {
     public func loadGoogleServiceInfo() -> [String: Any]? {
         guard let plistPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
               let plistData = FileManager.default.contents(atPath: plistPath),
-              let plistDict = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any] else {
+              let plistDict = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any]
+        else {
             print("錯誤：無法讀取 GoogleService-Info.plist")
             return nil
         }
@@ -36,4 +37,4 @@ public class DatabaseConfig {
     }
     
     private init() {}
-} 
+}

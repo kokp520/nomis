@@ -8,7 +8,7 @@ public enum Category: String, Codable, CaseIterable {
     case salary = "薪資"
     case investment = "投資"
     case other = "其他"
-    
+
     public var icon: String {
         switch self {
         case .food: return "🍽️"
@@ -25,4 +25,4 @@ public enum Category: String, Codable, CaseIterable {
 public enum TransactionType: String, Codable {
     case income = "收入"
     case expense = "支出"
-} 
+}

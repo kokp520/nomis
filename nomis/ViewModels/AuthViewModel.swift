@@ -34,7 +34,6 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerPresen
         Task {
             do {
                 let result = try await Auth.auth().signIn(withEmail: email, password: password)
-                self.errorMessage = nil
                 try await loadUserData(userId: result.user.uid)
             } catch {
                 self.errorMessage = error.localizedDescription

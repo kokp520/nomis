@@ -222,7 +222,7 @@ struct OverviewView: View {
     }
 }
 
-#Preview("有資料") {
+#Preview("測試preview, 有資料") {
     let viewModel = TransactionViewModel()
     viewModel.transactions = [
         Transaction(title: "午餐", amount: 120, category: .food, type: .expense),
@@ -236,8 +236,8 @@ struct OverviewView: View {
         .environmentObject(AuthViewModel())
 }
 
-#Preview("無資料") {
-    OverviewView()
-        .environmentObject(TransactionViewModel())
-        .environmentObject(AuthViewModel())
-}
+//#Preview("無資料") {
+//    OverviewView()
+//        .environmentObject(TransactionViewModel())
+//        .environmentObject(AuthViewModel())
+//}

@@ -1,3 +1,4 @@
+/*
 import Foundation
 import FirebaseCore
 import FirebaseFirestore
@@ -42,3 +43,4 @@ public class FirebaseService : ObservableObject {
         // 實現創建群組邏輯
     }
 } 
+*/
