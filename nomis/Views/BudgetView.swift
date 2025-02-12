@@ -1,5 +1,11 @@
 import SwiftUI
 import Charts
+//import nomis.Models.Category
+//import nomis.Models.TransactionType
+
+// 導入必要的類型
+//@_exported import struct nomis.Category
+//@_exported import struct nomis.TransactionType
 
 struct BudgetView: View {
     @EnvironmentObject var viewModel: TransactionViewModel

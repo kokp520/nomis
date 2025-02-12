@@ -8,13 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6CA2D549D0400038001 /* nomisApp.swift */; };
-		5204F6CD2D549D0400038001 /* ContentViewTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6CC2D549D0400038001 /* ContentViewTemp.swift */; };
 		5204F6CF2D549D1000038001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5204F6CE2D549D1000038001 /* Assets.xcassets */; };
 		5204F6D22D549D1000038001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5204F6D12D549D1000038001 /* Preview Assets.xcassets */; };
-		5204F6DB2D549FEF00038001 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5204F6D92D549FEF00038001 /* Expense.swift */; };
+		5215BB2A2D5B2B7C0068E3CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5215BB292D5B2B7C0068E3CB /* GoogleService-Info.plist */; };
 		5262DB122D576060004D5156 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB112D576060004D5156 /* MainTabView.swift */; };
-		5262DB142D576067004D5156 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB132D576067004D5156 /* TransactionViewModel.swift */; };
-		5262DB162D576079004D5156 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB152D576079004D5156 /* Transaction.swift */; };
 		5262DB182D5760BD004D5156 /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB172D5760BD004D5156 /* AddTransactionView.swift */; };
 		5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB192D5760C1004D5156 /* BudgetView.swift */; };
 		5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1B2D5760C8004D5156 /* TransactionListView.swift */; };
@@ -22,19 +19,42 @@
 		5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB1F2D5760D4004D5156 /* SettingsView.swift */; };
 		5262DB232D578380004D5156 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB212D578380004D5156 /* CommonViews.swift */; };
 		5262DB262D59E22C004D5156 /* Baskic8.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5262DB252D59E22C004D5156 /* Baskic8.otf */; };
-		5262DB282D59EFC2004D5156 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB272D59EFC2004D5156 /* ColorExtension.swift */; };
+		5262DB542D5B0C0B004D5156 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB502D5B0C0B004D5156 /* Expense.swift */; };
+		5262DB552D5B0C0B004D5156 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB512D5B0C0B004D5156 /* Group.swift */; };
+		5262DB562D5B0C0B004D5156 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB522D5B0C0B004D5156 /* Transaction.swift */; };
+		5262DB5C2D5B0C2A004D5156 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB5A2D5B0C2A004D5156 /* TransactionViewModel.swift */; };
+		5262DB5F2D5B0C41004D5156 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262DB5D2D5B0C41004D5156 /* ColorExtension.swift */; };
+		528599AE2D5B34B000CB2A0B /* Pods_nomis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800ED498B1CD06FDB0721365 /* Pods_nomis.framework */; };
+		528599AF2D5B34B000CB2A0B /* Pods_nomis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 800ED498B1CD06FDB0721365 /* Pods_nomis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		52F889D32D5C455E00341A4D /* DatabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C132D5C3CB900B76E68 /* DatabaseConfig.swift */; };
+		52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */; };
+		52FD3C0D2D5C322000B76E68 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C0C2D5C322000B76E68 /* User.swift */; };
+		52FD3C102D5C3C6A00B76E68 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */; };
+		52FD3C122D5C3C7D00B76E68 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C112D5C3C7D00B76E68 /* Category.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		528599B02D5B34B000CB2A0B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				528599AF2D5B34B000CB2A0B /* Pods_nomis.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		5204F6C72D549D0400038001 /* nomis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nomis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5204F6CA2D549D0400038001 /* nomisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nomisApp.swift; sourceTree = "<group>"; };
-		5204F6CC2D549D0400038001 /* ContentViewTemp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTemp.swift; sourceTree = "<group>"; };
 		5204F6CE2D549D1000038001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5204F6D12D549D1000038001 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		5204F6D92D549FEF00038001 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		5215BB292D5B2B7C0068E3CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5227886D2D5B4E8F006AA097 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = nomis/Info.plist; sourceTree = SOURCE_ROOT; };
+		5227886F2D5B5691006AA097 /* nomis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nomis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5262DB112D576060004D5156 /* MainTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
-		5262DB132D576067004D5156 /* TransactionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransactionViewModel.swift; path = nomis/ViewModels/TransactionViewModel.swift; sourceTree = SOURCE_ROOT; };
-		5262DB152D576079004D5156 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Transaction.swift; path = nomis/Models/Transaction.swift; sourceTree = SOURCE_ROOT; };
 		5262DB172D5760BD004D5156 /* AddTransactionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		5262DB192D5760C1004D5156 /* BudgetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		5262DB1B2D5760C8004D5156 /* TransactionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
@@ -42,7 +62,23 @@
 		5262DB1F2D5760D4004D5156 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5262DB212D578380004D5156 /* CommonViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
 		5262DB252D59E22C004D5156 /* Baskic8.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Baskic8.otf; sourceTree = "<group>"; };
-		5262DB272D59EFC2004D5156 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorExtension.swift; path = nomis/Extensions/ColorExtension.swift; sourceTree = SOURCE_ROOT; };
+		5262DB502D5B0C0B004D5156 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		5262DB512D5B0C0B004D5156 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		5262DB522D5B0C0B004D5156 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		5262DB5A2D5B0C2A004D5156 /* TransactionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
+		5262DB5D2D5B0C41004D5156 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		5285999F2D5B340800CB2A0B /* DatabaseConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseConfig.swift; sourceTree = "<group>"; };
+		528599A02D5B340800CB2A0B /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		528599AC2D5B34A800CB2A0B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		52FD3C0C2D5C322000B76E68 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		52FD3C0E2D5C3C6900B76E68 /* Services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Services.h; path = nomis/ViewModels/Services/Services.h; sourceTree = SOURCE_ROOT; };
+		52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitService.swift; path = nomis/ViewModels/Services/CloudKitService.swift; sourceTree = SOURCE_ROOT; };
+		52FD3C112D5C3C7D00B76E68 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		52FD3C132D5C3CB900B76E68 /* DatabaseConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseConfig.swift; sourceTree = "<group>"; };
+		52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		800ED498B1CD06FDB0721365 /* Pods_nomis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_nomis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85EC822651F660932F5E7A88 /* Pods-nomis.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nomis.debug.xcconfig"; path = "Target Support Files/Pods-nomis/Pods-nomis.debug.xcconfig"; sourceTree = "<group>"; };
+		DF70B8E5946A93F572D99C1A /* Pods-nomis.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nomis.release.xcconfig"; path = "Target Support Files/Pods-nomis/Pods-nomis.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,36 +86,52 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				528599AE2D5B34B000CB2A0B /* Pods_nomis.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		30AE1B08B2276ED26EB1EAF6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				85EC822651F660932F5E7A88 /* Pods-nomis.debug.xcconfig */,
+				DF70B8E5946A93F572D99C1A /* Pods-nomis.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		3C0736BB66AA0A66837730CB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				528599AC2D5B34A800CB2A0B /* CoreServices.framework */,
+				800ED498B1CD06FDB0721365 /* Pods_nomis.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5204F6BE2D549D0400038001 = {
 			isa = PBXGroup;
 			children = (
 				5204F6C92D549D0400038001 /* nomis */,
-				5204F6C82D549D0400038001 /* Products */,
+				30AE1B08B2276ED26EB1EAF6 /* Pods */,
+				3C0736BB66AA0A66837730CB /* Frameworks */,
+				5227886F2D5B5691006AA097 /* nomis.app */,
 			);
-			sourceTree = "<group>";
-		};
-		5204F6C82D549D0400038001 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5204F6C72D549D0400038001 /* nomis.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		5204F6C92D549D0400038001 /* nomis */ = {
 			isa = PBXGroup;
 			children = (
+				52FD3C152D5C3CB900B76E68 /* Services */,
+				5227886D2D5B4E8F006AA097 /* Info.plist */,
+				5215BB292D5B2B7C0068E3CB /* GoogleService-Info.plist */,
+				5262DB5B2D5B0C2A004D5156 /* ViewModels */,
+				5262DB532D5B0C0B004D5156 /* Models */,
 				5262DB242D59E1F9004D5156 /* Fonts */,
 				5204F6DE2D549FF900038001 /* Views */,
-				5204F6DA2D549FEF00038001 /* Models */,
 				5204F6CA2D549D0400038001 /* nomisApp.swift */,
-				5204F6CC2D549D0400038001 /* ContentViewTemp.swift */,
 				5204F6CE2D549D1000038001 /* Assets.xcassets */,
 				5204F6D02D549D1000038001 /* Preview Content */,
 			);
@@ -94,14 +146,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		5204F6DA2D549FEF00038001 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				5204F6D92D549FEF00038001 /* Expense.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		5204F6DE2D549FF900038001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,11 +154,9 @@
 				5262DB1B2D5760C8004D5156 /* TransactionListView.swift */,
 				5262DB192D5760C1004D5156 /* BudgetView.swift */,
 				5262DB172D5760BD004D5156 /* AddTransactionView.swift */,
-				5262DB272D59EFC2004D5156 /* ColorExtension.swift */,
 				5262DB222D578380004D5156 /* Components */,
-				5262DB152D576079004D5156 /* Transaction.swift */,
-				5262DB132D576067004D5156 /* TransactionViewModel.swift */,
 				5262DB112D576060004D5156 /* MainTabView.swift */,
+				5262DB5E2D5B0C41004D5156 /* Extensions */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -135,6 +177,58 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		5262DB532D5B0C0B004D5156 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				52FD3C0C2D5C322000B76E68 /* User.swift */,
+				5262DB502D5B0C0B004D5156 /* Expense.swift */,
+				5262DB512D5B0C0B004D5156 /* Group.swift */,
+				5262DB522D5B0C0B004D5156 /* Transaction.swift */,
+				52FD3C112D5C3C7D00B76E68 /* Category.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5262DB5B2D5B0C2A004D5156 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				528599A22D5B340800CB2A0B /* Services */,
+				5262DB5A2D5B0C2A004D5156 /* TransactionViewModel.swift */,
+			);
+			name = ViewModels;
+			path = nomis/ViewModels;
+			sourceTree = SOURCE_ROOT;
+		};
+		5262DB5E2D5B0C41004D5156 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5262DB5D2D5B0C41004D5156 /* ColorExtension.swift */,
+			);
+			name = Extensions;
+			path = nomis/Extensions;
+			sourceTree = SOURCE_ROOT;
+		};
+		528599A22D5B340800CB2A0B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5285999F2D5B340800CB2A0B /* DatabaseConfig.swift */,
+				528599A02D5B340800CB2A0B /* FirebaseService.swift */,
+				52FD3C0E2D5C3C6900B76E68 /* Services.h */,
+				52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */,
+			);
+			name = Services;
+			path = nomis/ViewModels/Services;
+			sourceTree = SOURCE_ROOT;
+		};
+		52FD3C152D5C3CB900B76E68 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				52FD3C132D5C3CB900B76E68 /* DatabaseConfig.swift */,
+				52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,9 +236,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5204F6D52D549D1000038001 /* Build configuration list for PBXNativeTarget "nomis" */;
 			buildPhases = (
+				BCB1AF04AE4145AEF7BA41D5 /* [CP] Check Pods Manifest.lock */,
 				5204F6C32D549D0400038001 /* Sources */,
 				5204F6C42D549D0400038001 /* Frameworks */,
 				5204F6C52D549D0400038001 /* Resources */,
+				4C8F9ABE1F332CF1A9144016 /* [CP] Embed Pods Frameworks */,
+				528599B02D5B34B000CB2A0B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -152,7 +249,7 @@
 			);
 			name = nomis;
 			productName = nomis;
-			productReference = 5204F6C72D549D0400038001 /* nomis.app */;
+			productReference = 5227886F2D5B5691006AA097 /* nomis.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -179,7 +276,7 @@
 				Base,
 			);
 			mainGroup = 5204F6BE2D549D0400038001;
-			productRefGroup = 5204F6C82D549D0400038001 /* Products */;
+			productRefGroup = 5204F6BE2D549D0400038001;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -196,29 +293,77 @@
 				5204F6D22D549D1000038001 /* Preview Assets.xcassets in Resources */,
 				5204F6CF2D549D1000038001 /* Assets.xcassets in Resources */,
 				5262DB262D59E22C004D5156 /* Baskic8.otf in Resources */,
+				5215BB2A2D5B2B7C0068E3CB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C8F9ABE1F332CF1A9144016 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-nomis/Pods-nomis-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-nomis/Pods-nomis-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-nomis/Pods-nomis-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BCB1AF04AE4145AEF7BA41D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-nomis-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5204F6C32D549D0400038001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52F889D32D5C455E00341A4D /* DatabaseConfig.swift in Sources */,
+				52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */,
+				52FD3C102D5C3C6A00B76E68 /* CloudKitService.swift in Sources */,
+				5262DB542D5B0C0B004D5156 /* Expense.swift in Sources */,
+				5262DB552D5B0C0B004D5156 /* Group.swift in Sources */,
+				5262DB5F2D5B0C41004D5156 /* ColorExtension.swift in Sources */,
 				5262DB182D5760BD004D5156 /* AddTransactionView.swift in Sources */,
+				52FD3C122D5C3C7D00B76E68 /* Category.swift in Sources */,
+				52FD3C0D2D5C322000B76E68 /* User.swift in Sources */,
 				5262DB232D578380004D5156 /* CommonViews.swift in Sources */,
-				5204F6DB2D549FEF00038001 /* Expense.swift in Sources */,
-				5262DB162D576079004D5156 /* Transaction.swift in Sources */,
-				5204F6CD2D549D0400038001 /* ContentViewTemp.swift in Sources */,
+				5262DB562D5B0C0B004D5156 /* Transaction.swift in Sources */,
 				5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */,
 				5262DB1E2D5760C8004D5156 /* OverviewView.swift in Sources */,
+				5262DB5C2D5B0C2A004D5156 /* TransactionViewModel.swift in Sources */,
 				5262DB122D576060004D5156 /* MainTabView.swift in Sources */,
 				5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */,
-				5262DB142D576067004D5156 /* TransactionViewModel.swift in Sources */,
 				5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */,
 				5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */,
-				5262DB282D59EFC2004D5156 /* ColorExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,15 +491,19 @@
 		};
 		5204F6D62D549D1000038001 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85EC822651F660932F5E7A88 /* Pods-nomis.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nomis/nomis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nomis/Preview Content\"";
-				DEVELOPMENT_TEAM = SV5887B53N;
+				DEVELOPMENT_TEAM = 2XMTD5UT4S;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = nomis/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -365,7 +514,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adi.nomis;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adi.nomis.0211;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -375,15 +524,19 @@
 		};
 		5204F6D72D549D1000038001 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF70B8E5946A93F572D99C1A /* Pods-nomis.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nomis/nomis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nomis/Preview Content\"";
-				DEVELOPMENT_TEAM = SV5887B53N;
+				DEVELOPMENT_TEAM = 2XMTD5UT4S;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = nomis/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -394,7 +547,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.adi.nomis;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adi.nomis.0211;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

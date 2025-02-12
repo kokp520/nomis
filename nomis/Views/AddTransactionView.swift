@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 // 頂部標題列視圖
 private struct HeaderView: View {

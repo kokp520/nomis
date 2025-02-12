@@ -42,7 +42,7 @@ struct MainTabView: View {
                 }
                 .tag(4)
         }
-        .onChange(of: selectedTab) { newValue in
+        .onChange(of: selectedTab) { _, newValue in
             if newValue == 2 {
                 showAddTransaction = true
                 selectedTab = 1
@@ -64,8 +64,9 @@ struct MainTabView: View {
             }
         }
     }
-} 
+}
 
 #Preview {
     MainTabView()
+        .environmentObject(TransactionViewModel.preview)
 }

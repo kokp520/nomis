@@ -10,7 +10,18 @@
         <string>NotoSansTC-Light.otf</string>
         <string>NotoSansTC-Thin.otf</string>
         <string>NotoSansTC-Black.otf</string>
-        <string>NotoSansTC-Thin.otf</string>
     </array>
+    <key>NSUbiquitousContainers</key>
+    <dict>
+        <key>iCloud.com.adi.nomis</key>
+        <dict>
+            <key>NSUbiquitousContainerIsDocumentScopePublic</key>
+            <true/>
+            <key>NSUbiquitousContainerName</key>
+            <string>Nomis</string>
+            <key>NSUbiquitousContainerSupportedFolderLevels</key>
+            <string>None</string>
+        </dict>
+    </dict>
 </dict>
 </plist> 
