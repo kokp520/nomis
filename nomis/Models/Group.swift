@@ -1,5 +1,5 @@
 import Foundation
-import CloudKit
+// import CloudKit
 
 public struct Group: Identifiable, Equatable {
     public let id: String
@@ -16,6 +16,7 @@ public struct Group: Identifiable, Equatable {
         self.createdAt = createdAt
     }
     
+    /*
     // CloudKit Record 轉換
     public init?(record: CKRecord) {
         guard let name = record["name"] as? String,
@@ -37,6 +38,7 @@ public struct Group: Identifiable, Equatable {
         record["members"] = members
         return record
     }
+    */
     
     // 實作 Equatable
     public static func == (lhs: Group, rhs: Group) -> Bool {

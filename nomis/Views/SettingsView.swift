@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
     @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var showingDeleteAlert = false
     @State private var showingExportSheet = false
@@ -9,6 +10,30 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
+                if let user = authViewModel.user {
+                    Section("會員資訊") {
+                        HStack {
+                            Text("名稱")
+                            Spacer()
+                            Text(user.name)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        HStack {
+                            Text("電子郵件")
+                            Spacer()
+                            Text(user.email)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Button(role: .destructive) {
+                            authViewModel.signOut()
+                        } label: {
+                            Label("登出", systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                    }
+                }
+                
                 Section("外觀") {
                     Toggle("深色模式", isOn: $isDarkMode)
                 }
@@ -69,10 +94,12 @@ struct ShareSheet: UIViewControllerRepresentable {
 #Preview("一般") {
     SettingsView()
         .environmentObject(TransactionViewModel())
+        .environmentObject(AuthViewModel())
 }
 
 #Preview("深色模式") {
     SettingsView()
         .environmentObject(TransactionViewModel())
+        .environmentObject(AuthViewModel())
         .preferredColorScheme(.dark)
 }

@@ -1,4 +1,5 @@
 import SwiftUI
+import AuthenticationServices
 
 struct LoginView: View {
     @StateObject private var authViewModel = AuthViewModel()
@@ -56,16 +57,17 @@ struct LoginView: View {
                 }
                 
                 Button(action: {
-                    authViewModel.signInWithApple()
+                    authViewModel.prepareSignInWithApple()
                 }) {
                     HStack {
                         Image(systemName: "apple.logo")
+                            .foregroundColor(.white)
                         Text("使用 Apple 登入")
+                            .foregroundColor(.white)
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.black)
-                    .foregroundColor(.white)
                     .cornerRadius(10)
                 }
                 

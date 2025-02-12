@@ -30,6 +30,7 @@
 		52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */; };
 		52F889D62D5C4DC300341A4D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889D52D5C4DC300341A4D /* LoginView.swift */; };
 		52F889D82D5C4E3B00341A4D /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */; };
+		52F889E82D5C7F7C00341A4D /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889E72D5C7F7C00341A4D /* FontExtension.swift */; };
 		52FD3C0D2D5C322000B76E68 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C0C2D5C322000B76E68 /* User.swift */; };
 		52FD3C102D5C3C6A00B76E68 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */; };
 		52FD3C122D5C3C7D00B76E68 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C112D5C3C7D00B76E68 /* Category.swift */; };
@@ -74,6 +75,7 @@
 		528599AC2D5B34A800CB2A0B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		52F889D52D5C4DC300341A4D /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		52F889E72D5C7F7C00341A4D /* FontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		52FD3C0C2D5C322000B76E68 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		52FD3C0E2D5C3C6900B76E68 /* Services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Services.h; path = nomis/ViewModels/Services/Services.h; sourceTree = SOURCE_ROOT; };
 		52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitService.swift; path = nomis/ViewModels/Services/CloudKitService.swift; sourceTree = SOURCE_ROOT; };
@@ -208,6 +210,7 @@
 		5262DB5E2D5B0C41004D5156 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				52F889E72D5C7F7C00341A4D /* FontExtension.swift */,
 				5262DB5D2D5B0C41004D5156 /* ColorExtension.swift */,
 			);
 			name = Extensions;
@@ -361,6 +364,7 @@
 				5262DB5F2D5B0C41004D5156 /* ColorExtension.swift in Sources */,
 				5262DB182D5760BD004D5156 /* AddTransactionView.swift in Sources */,
 				52FD3C122D5C3C7D00B76E68 /* Category.swift in Sources */,
+				52F889E82D5C7F7C00341A4D /* FontExtension.swift in Sources */,
 				52FD3C0D2D5C322000B76E68 /* User.swift in Sources */,
 				5262DB232D578380004D5156 /* CommonViews.swift in Sources */,
 				5262DB562D5B0C0B004D5156 /* Transaction.swift in Sources */,

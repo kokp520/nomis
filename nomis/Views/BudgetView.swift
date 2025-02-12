@@ -9,100 +9,107 @@ import Charts
 
 struct BudgetView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showingAddBudget = false
     @State private var selectedCategory: Category = .food
     @State private var budgetAmount = ""
     
     var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    HStack {
-                        Text("本月總支出")
-                        Spacer()
-                        Text("$\(String(format: "%.2f", viewModel.totalExpenses))")
-                            .foregroundColor(.red)
-                    }
-                    
-                    if #available(iOS 16.0, *) {
-                        Chart(viewModel.categoryExpenses, id: \.category) { item in
-                            BarMark(
-                                x: .value("Category", item.category.rawValue),
-                                y: .value("Amount", item.amount)
-                            )
-                            .foregroundStyle(by: .value("Category", item.category.rawValue))
-                        }
-                        .frame(height: 200)
-                        .padding(.vertical)
-                    }
-                }
-                
-                Section("分類預算") {
-                    ForEach(Category.allCases.filter { $0 != .salary && $0 != .investment }, id: \.self) { category in
-                        HStack {
-                            Text(category.icon)
-                            Text(category.rawValue)
-                            Spacer()
-                            VStack(alignment: .trailing) {
-                                Text("$\(String(format: "%.2f", viewModel.expenses(for: category)))")
-                                    .foregroundColor(.red)
-                                if let budget = viewModel.budget(for: category) {
-                                    Text("預算: $\(String(format: "%.2f", budget))")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedCategory = category
-                            if let budget = viewModel.budget(for: category) {
-                                budgetAmount = String(format: "%.2f", budget)
-                            } else {
-                                budgetAmount = ""
-                            }
-                            showingAddBudget = true
-                        }
-                    }
-                }
-            }
-            .navigationTitle("預算")
-            .sheet(isPresented: $showingAddBudget) {
+        SwiftUI.Group {
+            if authViewModel.isAuthenticated {
                 NavigationView {
-                    Form {
+                    List {
                         Section {
                             HStack {
-                                Text(selectedCategory.icon)
-                                Text(selectedCategory.rawValue)
+                                Text("本月總支出")
+                                Spacer()
+                                Text("$\(String(format: "%.2f", viewModel.totalExpenses))")
+                                    .foregroundColor(.red)
                             }
                             
-                            HStack {
-                                Text("$")
-                                TextField("預算金額", text: $budgetAmount)
-                                    .keyboardType(.decimalPad)
-                            }
-                        }
-                    }
-                    .navigationTitle("設定預算")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button("取消") {
-                                showingAddBudget = false
+                            if #available(iOS 16.0, *) {
+                                Chart(viewModel.categoryExpenses, id: \.category) { item in
+                                    BarMark(
+                                        x: .value("Category", item.category.rawValue),
+                                        y: .value("Amount", item.amount)
+                                    )
+                                    .foregroundStyle(by: .value("Category", item.category.rawValue))
+                                }
+                                .frame(height: 200)
+                                .padding(.vertical)
                             }
                         }
                         
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("儲存") {
-                                if let amount = Double(budgetAmount) {
-                                    viewModel.setBudget(amount, for: selectedCategory)
+                        Section("分類預算") {
+                            ForEach(Category.allCases.filter { $0 != .salary && $0 != .investment }, id: \.self) { category in
+                                HStack {
+                                    Text(category.icon)
+                                    Text(category.rawValue)
+                                    Spacer()
+                                    VStack(alignment: .trailing) {
+                                        Text("$\(String(format: "%.2f", viewModel.expenses(for: category)))")
+                                            .foregroundColor(.red)
+                                        if let budget = viewModel.budget(for: category) {
+                                            Text("預算: $\(String(format: "%.2f", budget))")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    }
                                 }
-                                showingAddBudget = false
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    selectedCategory = category
+                                    if let budget = viewModel.budget(for: category) {
+                                        budgetAmount = String(format: "%.2f", budget)
+                                    } else {
+                                        budgetAmount = ""
+                                    }
+                                    showingAddBudget = true
+                                }
                             }
                         }
                     }
+                    .navigationTitle("預算")
+                    .sheet(isPresented: $showingAddBudget) {
+                        NavigationView {
+                            Form {
+                                Section {
+                                    HStack {
+                                        Text(selectedCategory.icon)
+                                        Text(selectedCategory.rawValue)
+                                    }
+                                    
+                                    HStack {
+                                        Text("$")
+                                        TextField("預算金額", text: $budgetAmount)
+                                            .keyboardType(.decimalPad)
+                                    }
+                                }
+                            }
+                            .navigationTitle("設定預算")
+                            .navigationBarTitleDisplayMode(.inline)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button("取消") {
+                                        showingAddBudget = false
+                                    }
+                                }
+                                
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    Button("儲存") {
+                                        if let amount = Double(budgetAmount) {
+                                            viewModel.setBudget(amount, for: selectedCategory)
+                                        }
+                                        showingAddBudget = false
+                                    }
+                                }
+                            }
+                        }
+                        .presentationDetents([.height(250)])
+                    }
                 }
-                .presentationDetents([.height(250)])
+            } else {
+                LoginView()
             }
         }
     }
@@ -123,9 +130,11 @@ struct BudgetView: View {
     
     return BudgetView()
         .environmentObject(viewModel)
+        .environmentObject(AuthViewModel())
 }
 
 #Preview("無資料") {
     BudgetView()
         .environmentObject(TransactionViewModel())
+        .environmentObject(AuthViewModel())
 } 

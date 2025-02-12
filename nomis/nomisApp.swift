@@ -18,7 +18,9 @@ struct nomisApp: App {
     init() {
         FirebaseApp.configure()
         
-        #if DEBUG
+        // 暫時註解掉模擬器設定，先使用實際的 Firebase
+        /*
+        #if DEBUG && USE_FIREBASE_EMULATOR
         // 設定模擬器
         let settings = Firestore.firestore().settings
         settings.host = "127.0.0.1:8080"
@@ -32,6 +34,7 @@ struct nomisApp: App {
         // 設定 Storage 模擬器
         Storage.storage().useEmulator(withHost: "127.0.0.1", port: 9199)
         #endif
+        */
     }
     
     var body: some Scene {

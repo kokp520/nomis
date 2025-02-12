@@ -8,6 +8,10 @@ import UIKit
 import ObjectiveC
 import CryptoKit
 
+extension Notification.Name {
+    static let groupDidChange = Notification.Name("groupDidChange")
+}
+
 @MainActor
 public class FirebaseService: ObservableObject {
     public static let shared = FirebaseService()
@@ -237,7 +241,8 @@ public class FirebaseService: ObservableObject {
     
     public func selectGroup(_ group: Group) {
         selectedGroup = group
-        NotificationCenter.default.post(name: Notification.Name("SelectedGroupChanged"), object: nil)
+        // 發送群組變更通知
+        NotificationCenter.default.post(name: .groupDidChange, object: nil)
     }
     
     public func signInAnonymously() async throws {

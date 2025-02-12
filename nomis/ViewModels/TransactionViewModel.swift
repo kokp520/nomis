@@ -11,22 +11,36 @@ class TransactionViewModel: ObservableObject {
     private var firebaseService = FirebaseService.shared
     private var groupChangeObserver: NSObjectProtocol?
     
+    // 快取計算結果
+    private var cachedTotalIncome: Double?
+    private var cachedTotalExpenses: Double?
+    private var cachedBalance: Double?
+    
     enum DatePeriod {
         case week, month, year, all
     }
     
     var totalIncome: Double {
-        transactions.filter { $0.type == .income }.reduce(0) { $0 + $1.amount }
+        if cachedTotalIncome == nil {
+            cachedTotalIncome = transactions.filter { $0.type == .income }.reduce(0) { $0 + $1.amount }
+        }
+        return cachedTotalIncome ?? 0
     }
     
     var totalExpenses: Double {
-        transactions.filter { $0.type == .expense }.reduce(0) { $0 + $1.amount }
+        if cachedTotalExpenses == nil {
+            cachedTotalExpenses = transactions.filter { $0.type == .expense }.reduce(0) { $0 + $1.amount }
+        }
+        return cachedTotalExpenses ?? 0
     }
     
     var balance: Double {
-        transactions.reduce(0) { result, transaction in
-            result + (transaction.type == .income ? transaction.amount : -transaction.amount)
+        if cachedBalance == nil {
+            cachedBalance = transactions.reduce(0) { result, transaction in
+                result + (transaction.type == .income ? transaction.amount : -transaction.amount)
+            }
         }
+        return cachedBalance ?? 0
     }
     
     struct CategoryExpense: Identifiable {
@@ -39,34 +53,36 @@ class TransactionViewModel: ObservableObject {
         Array(transactions.sorted { $0.date > $1.date }.prefix(10))
     }
     
+    private func invalidateCache() {
+        cachedTotalIncome = nil
+        cachedTotalExpenses = nil
+        cachedBalance = nil
+    }
+    
     @MainActor func addTransaction(_ transaction: Transaction) {
-        print("DEBUG: 開始添加交易")
-        // 同步到 Firebase
-        if let group = FirebaseService.shared.selectedGroup {
-            print("DEBUG: 當前選擇的群組: \(group.name)")
-            Task {
-                do {
-                    print("DEBUG: 嘗試保存交易到 Firebase")
-                    try await FirebaseService.shared.addTransaction(transaction, groupID: group.id)
-                    print("DEBUG: 交易保存成功")
-                    // 只有在成功保存到 Firebase 後才更新本地資料
-                    DispatchQueue.main.async {
-                        self.transactions.append(transaction)
-                        print("DEBUG: 本地交易列表更新，當前數量: \(self.transactions.count)")
-                        self.updateCategoryExpenses()
-                    }
-                } catch {
-                    print("DEBUG: 保存交易時發生錯誤: \(error)")
-                }
-            }
-        } else {
+        guard let group = FirebaseService.shared.selectedGroup else {
             print("DEBUG: 添加交易失敗：沒有選擇群組")
+            return
+        }
+        
+        Task {
+            do {
+                try await FirebaseService.shared.addTransaction(transaction, groupID: group.id)
+                await MainActor.run {
+                    self.transactions.append(transaction)
+                    self.invalidateCache()
+                    self.updateCategoryExpenses()
+                }
+            } catch {
+                print("DEBUG: 保存交易時發生錯誤: \(error)")
+            }
         }
     }
     
     func deleteTransaction(_ transaction: Transaction) {
         if let index = transactions.firstIndex(where: { $0.id == transaction.id }) {
             transactions.remove(at: index)
+            invalidateCache()
             updateCategoryExpenses()
         }
     }
@@ -188,9 +204,11 @@ class TransactionViewModel: ObservableObject {
     init(firebaseService: FirebaseService = FirebaseService.shared) {
         self.firebaseService = firebaseService
         
+        setupGroupChangeObserver()
+        
         #if DEBUG
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            // 在 Preview 中使用模擬數據
+            // Preview 數據
             transactions = [
                 Transaction(title: "午餐", amount: 100, date: Date(), category: .food, type: .expense),
                 Transaction(title: "工資", amount: 50000, date: Date(), category: .salary, type: .income),
@@ -198,23 +216,18 @@ class TransactionViewModel: ObservableObject {
                 Transaction(title: "購物", amount: 500, date: Date(), category: .shopping, type: .expense)
             ]
             updateCategoryExpenses()
-            return
         }
         #endif
-        
-        loadTransactions()
-        loadBudgets()
-        updateCategoryExpenses()
-        
-        // 監聽群組變更
+    }
+    
+    private func setupGroupChangeObserver() {
         groupChangeObserver = NotificationCenter.default.addObserver(
-            forName: Notification.Name("SelectedGroupChanged"),
+            forName: .groupDidChange,
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            guard let self = self else { return }
-            Task { @MainActor in
-                await self.fetchTransactions()
+            Task {
+                await self?.fetchTransactions()
             }
         }
     }

@@ -1,6 +1,7 @@
 import Foundation
-import CloudKit
+// import CloudKit
 
+/*
 public class CloudKitService {
     public static let shared = CloudKitService()
     private let container = CKContainer.default()
@@ -22,4 +23,5 @@ public class CloudKitService {
     }
     
     // 在這裡添加 CloudKit 相關的方法
-} 
+}
+*/ 
