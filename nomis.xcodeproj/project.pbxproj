@@ -28,6 +28,8 @@
 		528599AF2D5B34B000CB2A0B /* Pods_nomis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 800ED498B1CD06FDB0721365 /* Pods_nomis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		52F889D32D5C455E00341A4D /* DatabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C132D5C3CB900B76E68 /* DatabaseConfig.swift */; };
 		52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */; };
+		52F889D62D5C4DC300341A4D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889D52D5C4DC300341A4D /* LoginView.swift */; };
+		52F889D82D5C4E3B00341A4D /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */; };
 		52FD3C0D2D5C322000B76E68 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C0C2D5C322000B76E68 /* User.swift */; };
 		52FD3C102D5C3C6A00B76E68 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */; };
 		52FD3C122D5C3C7D00B76E68 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C112D5C3C7D00B76E68 /* Category.swift */; };
@@ -70,6 +72,8 @@
 		5285999F2D5B340800CB2A0B /* DatabaseConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseConfig.swift; sourceTree = "<group>"; };
 		528599A02D5B340800CB2A0B /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		528599AC2D5B34A800CB2A0B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		52F889D52D5C4DC300341A4D /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		52FD3C0C2D5C322000B76E68 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		52FD3C0E2D5C3C6900B76E68 /* Services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Services.h; path = nomis/ViewModels/Services/Services.h; sourceTree = SOURCE_ROOT; };
 		52FD3C0F2D5C3C6A00B76E68 /* CloudKitService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitService.swift; path = nomis/ViewModels/Services/CloudKitService.swift; sourceTree = SOURCE_ROOT; };
@@ -149,6 +153,7 @@
 		5204F6DE2D549FF900038001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				52F889D52D5C4DC300341A4D /* LoginView.swift */,
 				5262DB1F2D5760D4004D5156 /* SettingsView.swift */,
 				5262DB1C2D5760C8004D5156 /* OverviewView.swift */,
 				5262DB1B2D5760C8004D5156 /* TransactionListView.swift */,
@@ -192,6 +197,7 @@
 		5262DB5B2D5B0C2A004D5156 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */,
 				528599A22D5B340800CB2A0B /* Services */,
 				5262DB5A2D5B0C2A004D5156 /* TransactionViewModel.swift */,
 			);
@@ -346,6 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52F889D82D5C4E3B00341A4D /* AuthViewModel.swift in Sources */,
 				52F889D32D5C455E00341A4D /* DatabaseConfig.swift in Sources */,
 				52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */,
 				52FD3C102D5C3C6A00B76E68 /* CloudKitService.swift in Sources */,
@@ -362,6 +369,7 @@
 				5262DB5C2D5B0C2A004D5156 /* TransactionViewModel.swift in Sources */,
 				5262DB122D576060004D5156 /* MainTabView.swift in Sources */,
 				5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */,
+				52F889D62D5C4DC300341A4D /* LoginView.swift in Sources */,
 				5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */,
 				5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */,
 			);

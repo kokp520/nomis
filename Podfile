@@ -6,8 +6,11 @@ target 'nomis' do
   use_frameworks!
 
   # Pods for nomis
-  # Add the Firebase pod for Google Analytics
+  pod 'Firebase/Core'
   pod 'FirebaseAnalytics'
+  pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseStorage'
 
   # For Analytics without IDFA collection capability, use this pod instead
   # pod 'Firebase/AnalyticsWithoutAdIdSupport'

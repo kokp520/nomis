@@ -1,23 +1,23 @@
-//
-//  nomisApp.swift
-//  nomis
-//
-//  Created by adi on 2025/2/6.
-//
-
 import SwiftUI
-import Firebase
+import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 
-@main
-struct nomisApp: App {
-    @StateObject private var authViewModel = AuthViewModel()
+struct BinTestAppView: App {
+    // 註冊 app delegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    init() {
-        FirebaseApp.configure()
-        
+    var body: some Scene {
+        WindowGroup {
+            BinMainView()
+        }
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         #if DEBUG
         // 設定模擬器
         let settings = Firestore.firestore().settings
@@ -32,17 +32,8 @@ struct nomisApp: App {
         // 設定 Storage 模擬器
         Storage.storage().useEmulator(withHost: "127.0.0.1", port: 9199)
         #endif
+        
+        FirebaseApp.configure()
+        return true
     }
-    
-    var body: some Scene {
-        WindowGroup {
-            if authViewModel.isAuthenticated {
-                MainTabView()
-                    .environmentObject(authViewModel)
-            } else {
-                LoginView()
-                    .environmentObject(authViewModel)
-            }
-        }
-    }
-}
+} 

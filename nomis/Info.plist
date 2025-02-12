@@ -23,5 +23,14 @@
             <string>None</string>
         </dict>
     </dict>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>YOUR-FIREBASE-REVERSED-CLIENT-ID</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist> 

@@ -2,6 +2,7 @@ import FirebaseFirestore
 import Foundation
 import SwiftUI
 
+@MainActor
 class TransactionViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var selectedPeriod: DatePeriod = .month

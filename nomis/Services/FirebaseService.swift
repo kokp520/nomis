@@ -243,6 +243,25 @@ public class FirebaseService: ObservableObject {
     public func signInAnonymously() async throws {
         // 實現匿名登入邏輯
     }
+    
+    func createUser(user: User) async throws {
+        try await db.collection("users").document(user.id).setData([
+            "name": user.name,
+            "email": user.email,
+            "id": user.id
+        ])
+    }
+    
+    func getUser(userId: String) async throws -> User {
+        let document = try await db.collection("users").document(userId).getDocument()
+        guard let data = document.data(),
+              let name = data["name"] as? String,
+              let email = data["email"] as? String,
+              let id = data["id"] as? String else {
+            throw NSError(domain: "FirebaseService", code: 404, userInfo: [NSLocalizedDescriptionKey: "User not found"])
+        }
+        return User(id: id, name: name, email: email)
+    }
 }
 
 #if DEBUG
