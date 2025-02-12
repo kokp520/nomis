@@ -1,24 +1,94 @@
-# Nomis - 記帳應用
+# Nomis - 優雅的記帳應用 💰
 
-一個簡單易用的記帳應用，使用 Firebase 和 CloudKit 作為後端服務。
+<div align="center">
+  <img src="assets/logo.png" alt="Nomis Logo" width="200"/>
+  <br>
+  <p>
+    <strong>簡單、直覺、優雅的個人記帳體驗</strong>
+  </p>
+</div>
 
-## 功能特點
+## 🌟 功能特點
 
-- 多群組支援
-- 收入支出追蹤
-- 分類統計
-- 預算管理
-- 跨裝置即時同步
-- iCloud 同步支援
+- 📱 多群組支援與跨裝置同步
+- 💸 收入支出智能追蹤
+- 📊 視覺化分析與統計
+- 💰 客製化預算管理
+- ⚡️ 即時資料同步
+- 🔐 安全的 iCloud 整合
 
-## 技術架構
+## 🎨 設計理念
 
+### 視覺設計
+- 採用現代簡約風格
+- 遵循 iOS Human Interface Guidelines
+- 支援淺色/深色模式
+- 使用自適應佈局
+
+### 色彩系統
+```swift
+// 主要色彩
+static let primary = Color(hex: "#007AFF")
+static let secondary = Color(hex: "#5856D6")
+
+// 輔助色彩
+static let success = Color(hex: "#34C759")
+static let warning = Color(hex: "#FF9500")
+static let error = Color(hex: "#FF3B30")
+```
+
+### 字體系統
+```swift
+// 標題字體
+static let titleFont = Font.system(size: 28, weight: .bold)
+// 副標題字體
+static let subtitleFont = Font.system(size: 17, weight: .semibold)
+// 內文字體
+static let bodyFont = Font.system(size: 15, weight: .regular)
+```
+
+## 🛠 技術架構
+
+### 前端技術
 - SwiftUI
+- 自定義動畫效果
+- 響應式設計
+- 無障礙支援
+
+### 後端服務
 - Firebase (Firestore + Auth)
 - CloudKit
 - MVVM 架構
 
-## 安裝步驟
+## 📱 UI 組件
+
+### 自定義組件
+- 圓形進度條
+- 自適應卡片視圖
+- 動態圖表
+- 客製化輸入框
+
+```swift
+// 範例：自定義按鈕樣式
+struct PrimaryButton: View {
+    let title: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.primary)
+                .cornerRadius(12)
+        }
+    }
+}
+```
+
+## 🚀 安裝步驟
 
 1. 克隆專案：
 ```bash
@@ -27,78 +97,64 @@ cd nomis
 ```
 
 2. 安裝依賴：
-   - 使用 CocoaPods 安裝依賴
-   - 在專案根目錄執行：
 ```bash
 pod install
 ```
-   - 開啟 `.xcworkspace` 檔案（不是 `.xcodeproj`）
 
 3. Firebase 設置：
    - 前往 [Firebase Console](https://console.firebase.google.com/)
-   - 創建新專案
-   - 添加 iOS 應用
-   - 下載 `GoogleService-Info.plist`
-   - 將設定值複製到 `DatabaseConfig.swift`
+   - 創建新專案並下載 `GoogleService-Info.plist`
+   - 配置 `DatabaseConfig.swift`
 
 4. CloudKit 設置：
-   - 在 Xcode 中啟用 iCloud 功能
-   - 設定適當的 Container Identifier
-   - 確保已配置正確的 Capabilities
+   - 在 Xcode 中啟用 iCloud
+   - 配置 Container Identifier
 
-5. 修改設定：
-   - 打開 `DatabaseConfig.swift`
-   - 填入您的 Firebase 設定值
-   - 配置 CloudKit 相關設定
+## 💻 開發環境
 
-## 開發環境設置
+- Xcode 15.0+
+- iOS 16.0+
+- Swift 5.9+
+- CocoaPods
 
-1. 開發環境：
-   - Xcode 15.0+
-   - iOS 16.0+
-   - Swift 5.9+
+## 📖 使用說明
 
-2. 後端服務設定：
-   - Firebase：配置開發和生產環境
-   - CloudKit：設定開發和生產容器
+### 首次使用
+1. 自動創建匿名帳戶
+2. 創建群組或加入現有群組
+3. 選擇同步方式
 
-## 使用說明
+### 記帳功能
+1. 點擊 "+" 新增交易
+2. 選擇交易類型
+3. 填寫詳細資訊
+4. 自動同步
 
-1. 首次使用：
-   - 應用會自動創建匿名帳戶
-   - 可以創建新群組或加入現有群組
-   - 可選擇使用 iCloud 帳號同步
+## ⚠️ 注意事項
 
-2. 記帳功能：
-   - 點擊 "+" 添加新交易
-   - 選擇收入或支出
-   - 填寫金額和分類
-   - 自動同步到雲端
+- 需要穩定網路連接
+- 建議定期備份
+- 注意 Firebase 用量限制
+- 確認 iCloud 設定
 
-3. 群組管理：
-   - 點擊左上角選單
-   - 可以創建或切換群組
-   - 群組內容即時同步
+## 📊 Firebase 限制
 
-## 注意事項
+| 服務項目 | 免費額度 |
+|---------|---------|
+| 同時連接 | 100     |
+| 存儲空間 | 1GB     |
+| 每日下載 | 10GB    |
+| 讀取次數 | 50,000/天|
+| 寫入次數 | 20,000/天|
 
-- 請確保有穩定的網路連接
-- 建議定期備份重要數據
-- 注意 Firebase 免費額度的使用限制
-- 確保 iCloud 帳號已正確設定
+## 🤝 貢獻指南
 
-## Firebase 免費額度
+歡迎提交 Pull Request 或建立 Issue。
 
-- 同時連接數：100
-- 存儲空間：1GB
-- 每日下載量：10GB
-- 文檔讀取：50,000/天
-- 文檔寫入：20,000/天
-
-## 貢獻指南
-
-歡迎提交 Pull Request 或提出 Issue。
-
-## 授權協議
+## 📄 授權協議
 
 MIT License
+
+<div align="center">
+  <p>Made with ❤️ by Nomis Team</p>
+</div>
