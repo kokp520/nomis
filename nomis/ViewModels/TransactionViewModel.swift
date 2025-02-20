@@ -174,7 +174,7 @@ class TransactionViewModel: ObservableObject {
         return Array(Set(filteredTransactions.prefix(5).map { $0.title }))
     }
     
-    private func updateCategoryExpenses() {
+    func updateCategoryExpenses() {
         var expensesByCategory: [Category: Double] = [:]
         
         for transaction in transactions where transaction.type == .expense {
