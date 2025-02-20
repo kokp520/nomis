@@ -82,6 +82,7 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerPresen
                 }
                 
                 print("開始註冊：\(email)")
+                // firebase authentication 內建的註冊功能 會生成唯一uid 以及密碼的加密儲存，還有管理用戶的身份驗證           
                 let result = try await Auth.auth().createUser(withEmail: email, password: password)
                 print("用戶創建成功，UID: \(result.user.uid)")
                 

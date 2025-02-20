@@ -194,6 +194,7 @@ class TransactionViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 self.transactions = transactions
+                self.invalidateCache()
                 self.updateCategoryExpenses()
             }
         } catch {
