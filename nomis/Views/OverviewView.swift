@@ -111,87 +111,11 @@ struct RecentTransactionsView: View {
     }
 }
 
-struct SidebarView: View {
-    @ObservedObject var firebaseService: FirebaseService
-    @Binding var showingSidebar: Bool
-    @Binding var showingCreateGroup: Bool
-    let geometry: GeometryProxy
-    @State private var showingDeleteAlert = false
-    @State private var groupToDelete: Group?
-
-    var body: some View {
-        HStack {
-            VStack {
-                List {
-                    Section(header: Text("群組")) {
-                        ForEach(firebaseService.groups) { group in
-                            HStack {
-                                Button(action: {
-                                    firebaseService.selectGroup(group)
-                                    showingSidebar = false
-                                }) {
-                                    HStack {
-                                        Text(group.name)
-                                        Spacer()
-                                        if firebaseService.selectedGroup?.id == group.id {
-                                            Image(systemName: "checkmark")
-                                                .foregroundColor(.accentColor)
-                                        }
-                                    }
-                                }
-                                
-                                if group.owner == firebaseService.currentUser?.id {
-                                    Button(action: {
-                                        groupToDelete = group
-                                        showingDeleteAlert = true
-                                    }) {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.red)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Button(action: {
-                    showingCreateGroup = true
-                }) {
-                    Label("建立新群組", systemImage: "plus.circle.fill")
-                }
-                .padding()
-            }
-            .frame(width: min(geometry.size.width * 0.75, 300))
-            .background(Color(.systemBackground))
-            .alert("確定要刪除群組？", isPresented: $showingDeleteAlert) {
-                Button("取消", role: .cancel) {}
-                Button("刪除", role: .destructive) {
-                    if let group = groupToDelete {
-                        Task {
-                            do {
-                                try await firebaseService.deleteGroup(group)
-                            } catch {
-                                print("刪除群組時發生錯誤：\(error)")
-                            }
-                        }
-                    }
-                }
-            } message: {
-                Text("此操作將會刪除群組中的所有交易記錄，且無法復原。")
-            }
-
-            Spacer()
-        }
-        .transition(.move(edge: .leading))
-    }
-}
-
 struct OverviewView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var sidebarViewModel: SidebarViewModel
     @ObservedObject private var firebaseService = FirebaseService.shared
-    @State private var showingSidebar = false
-    @State private var showingCreateGroup = false
     @State private var newGroupName = ""
     @State private var showingError = false
     @State private var errorMessage = ""
@@ -200,79 +124,33 @@ struct OverviewView: View {
         SwiftUI.Group {
             if authViewModel.isAuthenticated {
                 NavigationView {
-                    ZStack {
-                        // 主要內容
-                        ScrollView {
-                            VStack(spacing: 20) {
-                                // 餘額卡片
-                                BalanceView(balance: viewModel.balance)
-                                IncomeExpenseSummaryView(totalIncome: viewModel.totalIncome, totalExpenses: viewModel.totalExpenses)
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            // 餘額卡片
+                            BalanceView(balance: viewModel.balance)
+                            IncomeExpenseSummaryView(totalIncome: viewModel.totalIncome, totalExpenses: viewModel.totalExpenses)
 
-                                // 圖表
-                                CategoryExpenseView(categoryExpenses: viewModel.categoryExpenses)
+                            // 圖表
+                            CategoryExpenseView(categoryExpenses: viewModel.categoryExpenses)
 
-                                // 最近交易
-                                RecentTransactionsView(recentTransactions: viewModel.recentTransactions)
-                            }
-                            .padding()
+                            // 最近交易
+                            RecentTransactionsView(recentTransactions: viewModel.recentTransactions)
                         }
-                        .navigationTitle("總覽")
-                        .background(Color(.systemGroupedBackground))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button {
-                                    showingSidebar.toggle()
-                                } label: {
-                                    Image(systemName: "line.3.horizontal")
-                                }
+                        .padding()
+                    }
+                    .navigationTitle("總覽")
+                    .background(Color(.systemGroupedBackground))
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button {
+                                sidebarViewModel.showingSidebar.toggle()
+                            } label: {
+                                Image(systemName: "line.3.horizontal")
                             }
-                        }
-                        .onAppear {
-                            viewModel.updateCategoryExpenses()
-                        }
-
-                        // 側邊欄
-                        if showingSidebar {
-                            GeometryReader { geometry in
-                                SidebarView(
-                                    firebaseService: firebaseService,
-                                    showingSidebar: $showingSidebar,
-                                    showingCreateGroup: $showingCreateGroup,
-                                    geometry: geometry
-                                )
-                            }
-                            .background(Color.black.opacity(0.3)
-                                .onTapGesture {
-                                    showingSidebar = false
-                                }
-                            )
                         }
                     }
-                    .sheet(isPresented: $showingCreateGroup) {
-                        NavigationView {
-                            Form {
-                                TextField("群組名稱", text: $newGroupName)
-                            }
-                            .navigationTitle("建立新群組")
-                            .navigationBarItems(
-                                leading: Button("取消") {
-                                    showingCreateGroup = false
-                                },
-                                trailing: Button("建立") {
-                                    Task {
-                                        do {
-                                            try await firebaseService.createGroup(name: newGroupName)
-                                            showingCreateGroup = false
-                                            newGroupName = ""
-                                        } catch {
-                                            errorMessage = error.localizedDescription
-                                            showingError = true
-                                        }
-                                    }
-                                }
-                                .disabled(newGroupName.isEmpty)
-                            )
-                        }
+                    .onAppear {
+                        viewModel.updateCategoryExpenses()
                     }
                 }
             } else {

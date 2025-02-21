@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 public enum Category: String, Codable, CaseIterable {
     case food = "食物"
@@ -18,6 +19,18 @@ public enum Category: String, Codable, CaseIterable {
         case .salary: return "💰"
         case .investment: return "📈"
         case .other: return "📦"
+        }
+    }
+    
+    public var color: Color {
+        switch self {
+        case .food: return .orange
+        case .transport: return .blue
+        case .entertainment: return .purple
+        case .shopping: return .pink
+        case .salary: return .green
+        case .investment: return .mint
+        case .other: return .gray
         }
     }
 }

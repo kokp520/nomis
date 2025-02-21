@@ -20,13 +20,15 @@ private struct CustomCard<Content: View>: View {
 struct SettingsView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var sidebarViewModel: SidebarViewModel
+    @ObservedObject private var firebaseService = FirebaseService.shared
     @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var showingDeleteAlert = false
     @State private var showingExportSheet = false
 
     var body: some View {
         NavigationView {
-            ScrollView {
+            ZStack {
                 VStack(spacing: 16) {
                     if let user = authViewModel.user {
                         // 會員資訊卡片
@@ -149,9 +151,31 @@ struct SettingsView: View {
                     }
                 }
                 .padding()
+                .navigationTitle("設定")
+                .background(Color(.systemGroupedBackground))
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            sidebarViewModel.showingSidebar.toggle()
+                        } label: {
+                            Image(systemName: "line.3.horizontal")
+                        }
+                    }
+                }
+                
+                // 側邊欄
+                if sidebarViewModel.showingSidebar {
+                    GeometryReader { geometry in
+                        SidebarView(
+                            firebaseService: firebaseService,
+                            showingSidebar: $sidebarViewModel.showingSidebar,
+                            showingCreateGroup: $sidebarViewModel.showingCreateGroup,
+                            geometry: geometry
+                        )
+                    }
+                    .ignoresSafeArea()
+                }
             }
-            .navigationTitle("設定")
-            .background(Color(.systemGroupedBackground))
             .alert("確定要清除所有資料？", isPresented: $showingDeleteAlert) {
                 Button("取消", role: .cancel) {}
                 Button("清除", role: .destructive) {
@@ -181,11 +205,13 @@ struct ShareSheet: UIViewControllerRepresentable {
     SettingsView()
         .environmentObject(TransactionViewModel())
         .environmentObject(AuthViewModel())
+        .environmentObject(SidebarViewModel.shared)
 }
 
 #Preview("深色模式") {
     SettingsView()
         .environmentObject(TransactionViewModel())
         .environmentObject(AuthViewModel())
+        .environmentObject(SidebarViewModel.shared)
         .preferredColorScheme(.dark)
 }
