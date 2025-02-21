@@ -249,6 +249,57 @@ public class FirebaseService: ObservableObject {
         NotificationCenter.default.post(name: .groupDidChange, object: nil)
     }
     
+    public func deleteGroup(_ group: Group) async throws {
+        // 檢查是否為群組擁有者
+        guard let user = currentUser, group.owner == user.id else {
+            throw NSError(domain: "FirebaseService", code: -1, userInfo: [NSLocalizedDescriptionKey: "只有群組擁有者可以刪除群組"])
+        }
+        
+        // 刪除群組中的所有交易記錄
+        let transactionsSnapshot = try await db.collection("groups")
+            .document(group.id)
+            .collection("transactions")
+            .getDocuments()
+        
+        for doc in transactionsSnapshot.documents {
+            try await doc.reference.delete()
+        }
+        
+        // 刪除群組本身
+        try await db.collection("groups").document(group.id).delete()
+        
+        // 更新本地資料
+        groups.removeAll { $0.id == group.id }
+        if selectedGroup?.id == group.id {
+            selectedGroup = nil
+        }
+        
+        // 發送群組變更通知
+        NotificationCenter.default.post(name: .groupDidChange, object: nil)
+    }
+    
+    public func updateTransaction(_ transaction: Transaction) async throws {
+        guard let group = selectedGroup else {
+            throw NSError(domain: "FirebaseService", code: -1, userInfo: [NSLocalizedDescriptionKey: "沒有選擇群組"])
+        }
+        
+        let transactionData: [String: Any] = [
+            "id": transaction.id,
+            "title": transaction.title,
+            "amount": transaction.amount,
+            "date": transaction.date,
+            "category": transaction.category.rawValue,
+            "type": transaction.type.rawValue,
+            "note": transaction.note ?? "",
+            "updatedAt": FieldValue.serverTimestamp()
+        ]
+        
+        try await db.collection("groups").document(group.id)
+            .collection("transactions")
+            .document(transaction.id)
+            .setData(transactionData, merge: true)
+    }
+    
     public func signInAnonymously() async throws {
         // 實現匿名登入邏輯
     }

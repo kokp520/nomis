@@ -1,71 +1,157 @@
 import SwiftUI
 
+// 卡片視圖元件
+private struct CustomCard<Content: View>: View {
+    let content: Content
+
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        content
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 2)
+    }
+}
+
 struct SettingsView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
     @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var showingDeleteAlert = false
     @State private var showingExportSheet = false
-    
+
     var body: some View {
         NavigationView {
-            List {
-                if let user = authViewModel.user {
-                    Section("會員資訊") {
-                        HStack {
-                            Text("名稱")
-                            Spacer()
-                            Text(user.name)
-                                .foregroundColor(.secondary)
+            ScrollView {
+                VStack(spacing: 16) {
+                    if let user = authViewModel.user {
+                        // 會員資訊卡片
+                        CustomCard {
+                            VStack(spacing: 16) {
+                                HStack {
+                                    Image(systemName: "person.circle.fill")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.blue)
+
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(user.name)
+                                            .font(.headline)
+                                        Text(user.email)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                }
+
+                                Button(role: .destructive) {
+                                    authViewModel.signOut()
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                                        Text("登出")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.red.opacity(0.1))
+                                    .foregroundColor(.red)
+                                    .cornerRadius(8)
+                                }
+                            }
                         }
-                        
-                        HStack {
-                            Text("電子郵件")
-                            Spacer()
-                            Text(user.email)
-                                .foregroundColor(.secondary)
+                    }
+
+                    // 資料管理卡片
+                    CustomCard {
+                        VStack(spacing: 16) {
+                            HStack {
+                                Image(systemName: "externaldrive")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                                Text("資料管理")
+                                    .font(.headline)
+                                Spacer()
+                            }
+
+                            Button {
+                                showingExportSheet = true
+                            } label: {
+                                HStack {
+                                    Image(systemName: "square.and.arrow.up")
+                                    Text("匯出資料")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding()
+                                .background(Color.blue.opacity(0.1))
+                                .foregroundColor(.blue)
+                                .cornerRadius(8)
+                            }
+
+                            Button(role: .destructive) {
+                                showingDeleteAlert = true
+                            } label: {
+                                HStack {
+                                    Image(systemName: "trash")
+                                    Text("清除所有資料")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding()
+                                .background(Color.red.opacity(0.1))
+                                .foregroundColor(.red)
+                                .cornerRadius(8)
+                            }
                         }
-                        
-                        Button(role: .destructive) {
-                            authViewModel.signOut()
-                        } label: {
-                            Label("登出", systemImage: "rectangle.portrait.and.arrow.right")
+                    }
+
+                    // 關於卡片
+                    CustomCard {
+                        VStack(spacing: 16) {
+                            HStack {
+                                Image(systemName: "info.circle")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                                Text("關於")
+                                    .font(.headline)
+                                Spacer()
+                            }
+
+                            HStack {
+                                Text("版本")
+                                Spacer()
+                                Text("1.0.0")
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.vertical, 4)
+
+                            Link(destination: URL(string: "https://github.com/yourusername/nomis")!) {
+                                HStack {
+                                    Image(systemName: "link")
+                                    Text("GitHub")
+                                    Spacer()
+                                    Image(systemName: "arrow.up.right")
+                                        .font(.caption)
+                                }
+                                .padding()
+                                .background(Color.blue.opacity(0.1))
+                                .foregroundColor(.blue)
+                                .cornerRadius(8)
+                            }
                         }
                     }
                 }
-                
-                Section("外觀") {
-                    Toggle("深色模式", isOn: $isDarkMode)
-                }
-                
-                Section("資料") {
-                    Button {
-                        showingExportSheet = true
-                    } label: {
-                        Label("匯出資料", systemImage: "square.and.arrow.up")
-                    }
-                    
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Label("清除所有資料", systemImage: "trash")
-                    }
-                }
-                
-                Section("關於") {
-                    HStack {
-                        Text("版本")
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Link(destination: URL(string: "https://github.com/yourusername/nomis")!) {
-                        Label("GitHub", systemImage: "link")
-                    }
-                }
+                .padding()
             }
             .navigationTitle("設定")
+            .background(Color(.systemGroupedBackground))
             .alert("確定要清除所有資料？", isPresented: $showingDeleteAlert) {
                 Button("取消", role: .cancel) {}
                 Button("清除", role: .destructive) {
@@ -83,12 +169,12 @@ struct SettingsView: View {
 
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
-    
-    func makeUIViewController(context: Context) -> UIActivityViewController {
+
+    func makeUIViewController(context _: Context) -> UIActivityViewController {
         UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
     }
-    
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+
+    func updateUIViewController(_: UIActivityViewController, context _: Context) {}
 }
 
 #Preview("一般") {

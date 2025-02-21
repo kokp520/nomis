@@ -10,6 +10,10 @@ struct TransactionListView: View {
     @EnvironmentObject var viewModel: TransactionViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var searchText = ""
+    @State private var selectedTransaction: Transaction?
+    @State private var showingOptions = false
+    @State private var showingEditSheet = false
+    @State private var isSelected = false
     
     private var filteredTransactions: [Transaction] {
         if searchText.isEmpty {
@@ -49,15 +53,56 @@ struct TransactionListView: View {
                                     .padding(.horizontal)
                                 
                                 ForEach(groupedTransactions[date] ?? []) { transaction in
-                                    TransactionRowView(transaction: transaction)
-                                        .swipeActions(edge: .trailing) {
-                                            Button(role: .destructive) {
-                                                viewModel.deleteTransaction(transaction)
-                                            } label: {
-                                                Label("刪除", systemImage: "trash")
+                                    Button(action: {
+                                        selectedTransaction = transaction
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                            isSelected = true
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                                isSelected = false
+                                                showingOptions = true
                                             }
                                         }
+                                    }) {
+                                        HStack {
+                                            // 類別圖示
+                                            Text(transaction.category.icon)
+                                                .font(.title3)
+                                                .padding(8)
+                                                .background(
+                                                    Circle()
+                                                        .fill(Color.blue.opacity(0.1))
+                                                )
+                                            
+                                            // 標題和備註
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(transaction.title)
+                                                    .foregroundColor(.primary)
+                                                if let note = transaction.note {
+                                                    Text(note)
+                                                        .font(.caption)
+                                                        .foregroundColor(.secondary)
+                                                }
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            // 金額
+                                            Text("$\(String(format: "%.2f", transaction.amount))")
+                                                .foregroundColor(transaction.type == .income ? .green : .red)
+                                                .font(.headline)
+                                        }
+                                        .padding(.vertical, 8)
                                         .padding(.horizontal)
+                                        .background(Color(.systemBackground))
+                                        .cornerRadius(12)
+                                        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+                                        .scaleEffect(selectedTransaction?.id == transaction.id && isSelected ? 0.95 : 1.0)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 4)
                                 }
                             }
                         }
@@ -65,6 +110,69 @@ struct TransactionListView: View {
                     .searchable(text: $searchText, prompt: "搜尋交易...")
                     .navigationTitle("交易記錄")
                     .background(Color(.systemGroupedBackground))
+                    .sheet(isPresented: $showingOptions) {
+                        VStack(spacing: 0) {
+                            Text("交易選項")
+                                .font(.headline)
+                                .padding()
+                            
+                            Divider()
+                            
+                            Button(action: {
+                                showingOptions = false
+                                showingEditSheet = true
+                            }) {
+                                Label("編輯", systemImage: "pencil")
+                                    .foregroundColor(.primary)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                            }
+                            
+                            Divider()
+                            
+                            Button(role: .destructive) {
+                                if let transaction = selectedTransaction {
+                                    Task {
+                                        do {
+                                            try await FirebaseService.shared.deleteTransaction(transaction)
+                                            viewModel.deleteTransaction(transaction)
+                                            showingOptions = false
+                                        } catch {
+                                            print("刪除交易時發生錯誤：\(error)")
+                                        }
+                                    }
+                                }
+                            } label: {
+                                Label("刪除", systemImage: "trash")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                            }
+                            
+                            Divider()
+                            
+                            Button(action: {
+                                showingOptions = false
+                            }) {
+                                Text("取消")
+                                    .foregroundColor(.blue)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                            }
+                        }
+                        .background(Color(.systemBackground))
+                        .presentationDetents([.height(250)])
+                    }
+                    .sheet(isPresented: $showingEditSheet) {
+                        if let transaction = selectedTransaction {
+                            NavigationView {
+                                AddTransactionView(
+                                    isPresented: $showingEditSheet,
+                                    type: transaction.type,
+                                    editingTransaction: transaction
+                                )
+                            }
+                        }
+                    }
                 }
             } else {
                 LoginView()
@@ -72,6 +180,103 @@ struct TransactionListView: View {
         }
     }
 }
+
+/*
+struct EditTransactionView: View {
+    let transaction: Transaction
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var viewModel: TransactionViewModel
+    @State private var title: String
+    @State private var amount: String
+    @State private var category: Category
+    @State private var date: Date
+    @State private var note: String
+    
+    init(transaction: Transaction) {
+        self.transaction = transaction
+        _title = State(initialValue: transaction.title)
+        _amount = State(initialValue: String(format: "%.2f", transaction.amount))
+        _category = State(initialValue: transaction.category)
+        _date = State(initialValue: transaction.date)
+        _note = State(initialValue: transaction.note ?? "")
+    }
+    
+    var body: some View {
+        List {
+            Group {
+                HStack {
+                    Text("標題")
+                    Spacer()
+                    TextField("請輸入標題", text: $title)
+                        .multilineTextAlignment(.trailing)
+                }
+                
+                HStack {
+                    Text("金額")
+                    Spacer()
+                    TextField("請輸入金額", text: $amount)
+                        .multilineTextAlignment(.trailing)
+                        .keyboardType(.decimalPad)
+                }
+                
+                HStack {
+                    Text("類別")
+                    Spacer()
+                    Picker("", selection: $category) {
+                        ForEach(transaction.type == .income ? Category.incomeCategories : Category.expenseCategories, id: \.self) { category in
+                            Text(category.rawValue).tag(category)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+                
+                DatePicker("日期", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                
+                HStack {
+                    Text("備註")
+                    Spacer()
+                    TextField("選填", text: $note)
+                        .multilineTextAlignment(.trailing)
+                }
+            }
+        }
+        .listStyle(InsetGroupedListStyle())
+        .navigationTitle("編輯交易")
+        .navigationBarItems(
+            leading: Button("取消") {
+                dismiss()
+            },
+            trailing: Button("儲存") {
+                saveTransaction()
+            }
+        )
+    }
+    
+    private func saveTransaction() {
+        guard let amountValue = Double(amount) else { return }
+        
+        let updatedTransaction = Transaction(
+            id: transaction.id,
+            title: title,
+            amount: amountValue,
+            date: date,
+            category: category,
+            type: transaction.type,
+            note: note.isEmpty ? nil : note
+        )
+        
+        Task {
+            do {
+                try await FirebaseService.shared.updateTransaction(updatedTransaction)
+                viewModel.updateTransaction(updatedTransaction)
+                dismiss()
+            } catch {
+                print("更新交易時發生錯誤：\(error)")
+            }
+        }
+    }
+}
+*/
 
 #Preview {
     let viewModel = TransactionViewModel()

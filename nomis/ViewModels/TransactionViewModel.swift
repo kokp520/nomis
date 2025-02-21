@@ -202,6 +202,14 @@ class TransactionViewModel: ObservableObject {
         }
     }
     
+    func updateTransaction(_ updatedTransaction: Transaction) {
+        if let index = transactions.firstIndex(where: { $0.id == updatedTransaction.id }) {
+            transactions[index] = updatedTransaction
+            invalidateCache()
+            updateCategoryExpenses()
+        }
+    }
+    
     init(firebaseService: FirebaseService = FirebaseService.shared) {
         self.firebaseService = firebaseService
         

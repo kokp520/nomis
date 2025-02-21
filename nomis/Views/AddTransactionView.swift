@@ -534,16 +534,37 @@ struct AddTransactionView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var isPresented: Bool
     @EnvironmentObject var viewModel: TransactionViewModel
-    @State var amount = ""
-    @State var category: Category = .food
-    @State var title = ""
-    @State var note = ""
+    @State var amount: String
+    @State var category: Category
+    @State var title: String
+    @State var note: String
     @State var showKeypad = false
     @State var isAmountFocused = false
-    @State var selectedDate = Date()
+    @State var selectedDate: Date
     @State var showAlert = false
     @State var expression = ""
     let type: TransactionType
+    let editingTransaction: Transaction?
+    
+    init(isPresented: Binding<Bool>, type: TransactionType, editingTransaction: Transaction? = nil) {
+        self._isPresented = isPresented
+        self.type = type
+        self.editingTransaction = editingTransaction
+        
+        if let transaction = editingTransaction {
+            _amount = State(initialValue: String(format: "%.2f", transaction.amount))
+            _category = State(initialValue: transaction.category)
+            _title = State(initialValue: transaction.title)
+            _note = State(initialValue: transaction.note ?? "")
+            _selectedDate = State(initialValue: transaction.date)
+        } else {
+            _amount = State(initialValue: "")
+            _category = State(initialValue: type == .expense ? .food : .salary)
+            _title = State(initialValue: "")
+            _note = State(initialValue: "")
+            _selectedDate = State(initialValue: Date())
+        }
+    }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -678,6 +699,7 @@ struct AddTransactionView: View {
         let roundedAmount = round(amountValue)
         
         let transaction = Transaction(
+            id: editingTransaction?.id ?? UUID().uuidString,
             title: title,
             amount: roundedAmount,
             date: selectedDate,
@@ -686,7 +708,20 @@ struct AddTransactionView: View {
             note: note.isEmpty ? nil : note
         )
         
-        viewModel.addTransaction(transaction)
+        if let editingTransaction = editingTransaction {
+            Task {
+                do {
+                    try await FirebaseService.shared.updateTransaction(transaction)
+                    viewModel.updateTransaction(transaction)
+                    isPresented = false
+                } catch {
+                    print("更新交易時發生錯誤：\(error)")
+                }
+            }
+        } else {
+            viewModel.addTransaction(transaction)
+            isPresented = false
+        }
     }
 }
 

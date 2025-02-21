@@ -116,6 +116,8 @@ struct SidebarView: View {
     @Binding var showingSidebar: Bool
     @Binding var showingCreateGroup: Bool
     let geometry: GeometryProxy
+    @State private var showingDeleteAlert = false
+    @State private var groupToDelete: Group?
 
     var body: some View {
         HStack {
@@ -123,16 +125,28 @@ struct SidebarView: View {
                 List {
                     Section(header: Text("群組")) {
                         ForEach(firebaseService.groups) { group in
-                            Button(action: {
-                                firebaseService.selectGroup(group)
-                                showingSidebar = false
-                            }) {
-                                HStack {
-                                    Text(group.name)
-                                    Spacer()
-                                    if firebaseService.selectedGroup?.id == group.id {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(.accentColor)
+                            HStack {
+                                Button(action: {
+                                    firebaseService.selectGroup(group)
+                                    showingSidebar = false
+                                }) {
+                                    HStack {
+                                        Text(group.name)
+                                        Spacer()
+                                        if firebaseService.selectedGroup?.id == group.id {
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(.accentColor)
+                                        }
+                                    }
+                                }
+                                
+                                if group.owner == firebaseService.currentUser?.id {
+                                    Button(action: {
+                                        groupToDelete = group
+                                        showingDeleteAlert = true
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.red)
                                     }
                                 }
                             }
@@ -149,6 +163,22 @@ struct SidebarView: View {
             }
             .frame(width: min(geometry.size.width * 0.75, 300))
             .background(Color(.systemBackground))
+            .alert("確定要刪除群組？", isPresented: $showingDeleteAlert) {
+                Button("取消", role: .cancel) {}
+                Button("刪除", role: .destructive) {
+                    if let group = groupToDelete {
+                        Task {
+                            do {
+                                try await firebaseService.deleteGroup(group)
+                            } catch {
+                                print("刪除群組時發生錯誤：\(error)")
+                            }
+                        }
+                    }
+                }
+            } message: {
+                Text("此操作將會刪除群組中的所有交易記錄，且無法復原。")
+            }
 
             Spacer()
         }
