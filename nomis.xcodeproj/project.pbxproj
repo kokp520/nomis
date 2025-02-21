@@ -28,6 +28,7 @@
 		528599AF2D5B34B000CB2A0B /* Pods_nomis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 800ED498B1CD06FDB0721365 /* Pods_nomis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		52C6B3932D6867FC009B08D7 /* SidebarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C6B3922D6867FC009B08D7 /* SidebarViewModel.swift */; };
 		52C6B3952D686B9E009B08D7 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C6B3942D686B9E009B08D7 /* SidebarView.swift */; };
+		52C6B3972D6884EB009B08D7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C6B3962D6884EB009B08D7 /* HomeView.swift */; };
 		52F889D32D5C455E00341A4D /* DatabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C132D5C3CB900B76E68 /* DatabaseConfig.swift */; };
 		52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */; };
 		52F889D62D5C4DC300341A4D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889D52D5C4DC300341A4D /* LoginView.swift */; };
@@ -77,6 +78,7 @@
 		528599AC2D5B34A800CB2A0B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		52C6B3922D6867FC009B08D7 /* SidebarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarViewModel.swift; sourceTree = "<group>"; };
 		52C6B3942D686B9E009B08D7 /* SidebarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		52C6B3962D6884EB009B08D7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		52F889D52D5C4DC300341A4D /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		52F889E72D5C7F7C00341A4D /* FontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				5262DB222D578380004D5156 /* Components */,
 				5262DB112D576060004D5156 /* MainTabView.swift */,
 				5262DB5E2D5B0C41004D5156 /* Extensions */,
+				52C6B3962D6884EB009B08D7 /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */,
 				52C6B3952D686B9E009B08D7 /* SidebarView.swift in Sources */,
 				52F889D62D5C4DC300341A4D /* LoginView.swift in Sources */,
+				52C6B3972D6884EB009B08D7 /* HomeView.swift in Sources */,
 				5262DB1A2D5760C1004D5156 /* BudgetView.swift in Sources */,
 				5262DB202D5760D4004D5156 /* SettingsView.swift in Sources */,
 			);

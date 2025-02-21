@@ -1,3 +1,6 @@
+
+
+// 已經經換成home view了 先註解
 import Charts
 import FirebaseCore
 import SwiftUI

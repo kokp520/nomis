@@ -15,6 +15,7 @@ struct MainTabView: View {
                 ZStack {
                     TabView(selection: $selectedTab) {
                         OverviewView()
+//                        HomeView()
                             .environmentObject(viewModel)
                             .environmentObject(sidebarViewModel)
                             .tabItem {
