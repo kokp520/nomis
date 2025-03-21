@@ -85,11 +85,13 @@ public class FirebaseService: ObservableObject {
             let credential = OAuthProvider.credential(
                 withProviderID: "apple.com",
                 idToken: idToken,
-                rawNonce: currentNonce ?? "nil" // 先暫時用nonce來當作nil, 因為要用string
+                rawNonce: currentNonce ?? "nil"
             )
             
             let authResult = try await Auth.auth().signIn(with: credential)
             let user = authResult.user
+            
+            print("用戶登入成功：\(user.uid)")
             
             // 更新用戶資料
             currentUser = User(
@@ -99,8 +101,17 @@ public class FirebaseService: ObservableObject {
             )
             isAuthenticated = true
             
+            print("當前用戶設置完成：\(currentUser?.id ?? "nil")")
+            
             // 儲存用戶資料到 Firestore
             try await saveUserToFirestore(user: currentUser!)
+            
+            // 立即獲取群組
+            try await fetchGroups()
+            print("獲取到的群組數量：\(groups.count)")
+            groups.forEach { group in
+                print("群組：\(group.name), 成員：\(group.members)")
+            }
         }
     }
     
@@ -134,22 +145,34 @@ public class FirebaseService: ObservableObject {
     }
     
     public func fetchGroups() async throws {
-        guard let user = currentUser else { return }
+        guard let user = currentUser else {
+            print("fetchGroups: 當前用戶為空")
+            return
+        }
+        
+        print("開始獲取群組，用戶ID：\(user.id)")
         
         let snapshot = try await db.collection("groups")
             .whereField("members", arrayContains: user.id)
             .getDocuments()
         
+        print("查詢到 \(snapshot.documents.count) 個群組文檔")
+        
         groups = snapshot.documents.compactMap { doc -> Group? in
             let data = doc.data()
+            print("群組文檔數據：\(data)")
+            
             guard let name = data["name"] as? String,
                   let owner = data["owner"] as? String,
                   let members = data["members"] as? [String]
             else {
+                print("群組數據格式不正確：\(doc.documentID)")
                 return nil
             }
             return Group(id: doc.documentID, name: name, owner: owner, members: members)
         }
+        
+        print("處理後的群組數量：\(groups.count)")
     }
     
     public func addMemberToGroup(_ email: String) async throws {
@@ -201,6 +224,19 @@ public class FirebaseService: ObservableObject {
     }
     
     public func fetchTransactions(groupID: String) async throws -> [Transaction] {
+        // 檢查用戶是否為群組成員
+        guard let user = currentUser else {
+            throw NSError(domain: "FirebaseService", code: -1, userInfo: [NSLocalizedDescriptionKey: "用戶未登入"])
+        }
+        
+        // 獲取群組資訊並檢查權限
+        let groupDoc = try await db.collection("groups").document(groupID).getDocument()
+        guard let groupData = groupDoc.data(),
+              let members = groupData["members"] as? [String],
+              members.contains(user.id) else {
+            throw NSError(domain: "FirebaseService", code: -1, userInfo: [NSLocalizedDescriptionKey: "沒有權限訪問該群組"])
+        }
+        
         let snapshot = try await db.collection("groups")
             .document(groupID)
             .collection("transactions")

@@ -56,20 +56,59 @@ struct SidebarView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 60)
                             } else {
-                                ForEach(firebaseService.groups) { group in
-                                    GroupRowView(
-                                        group: group,
-                                        isSelected: firebaseService.selectedGroup?.id == group.id,
-                                        onSelect: {
-                                            firebaseService.selectGroup(group)
-                                            closeSidebar()
-                                        },
-                                        onDelete: {
-                                            groupToDelete = group
-                                            showingDeleteAlert = true
-                                        },
-                                        canDelete: group.owner == firebaseService.currentUser?.id
-                                    )
+                                // 我的群組
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("我的群組")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+                                        .padding(.horizontal, 16)
+                                    
+                                    ForEach(firebaseService.groups.filter { $0.owner == firebaseService.currentUser?.id }) { group in
+                                        GroupRowView(
+                                            group: group,
+                                            isSelected: firebaseService.selectedGroup?.id == group.id,
+                                            onSelect: {
+                                                firebaseService.selectGroup(group)
+                                                closeSidebar()
+                                            },
+                                            onDelete: {
+                                                groupToDelete = group
+                                                showingDeleteAlert = true
+                                            },
+                                            canDelete: true
+                                        )
+                                    }
+                                }
+                                
+                                // 參與的群組
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("參與的群組")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+                                        .padding(.horizontal, 16)
+                                        .padding(.top, 24)
+                                    
+                                    ForEach(firebaseService.groups.filter { group in
+                                        if let currentUserId = firebaseService.currentUser?.id {
+                                            return group.owner != currentUserId && 
+                                                   group.members.contains(currentUserId)
+                                        }
+                                        return false
+                                    }) { group in
+                                        GroupRowView(
+                                            group: group,
+                                            isSelected: firebaseService.selectedGroup?.id == group.id,
+                                            onSelect: {
+                                                firebaseService.selectGroup(group)
+                                                closeSidebar()
+                                            },
+                                            onDelete: {
+                                                groupToDelete = group
+                                                showingDeleteAlert = true
+                                            },
+                                            canDelete: false
+                                        )
+                                    }
                                 }
                             }
                         }
