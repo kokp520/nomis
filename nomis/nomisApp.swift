@@ -10,35 +10,18 @@ import Firebase
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
+import CoreData
 
 @main
 struct nomisApp: App {
     @StateObject private var authViewModel = AuthViewModel()
+    @Environment(\.scenePhase) private var scenePhase
+    let coreDataManager: CoreDataManager
     
     init() {
+        self.coreDataManager = CoreDataManager.shared
+        
         FirebaseApp.configure()
-
-        // cannel jump up login view, if user is already logged in
-//         authViewModel.checkAuthenticationStatus()
-//        authViewModel.setupAuthStateListener()
-        
-        // 暫時註解掉模擬器設定，先使用實際的 Firebase
-        /*
-        #if DEBUG && USE_FIREBASE_EMULATOR
-        // 設定模擬器
-        let settings = Firestore.firestore().settings
-        settings.host = "127.0.0.1:8080"
-        settings.isPersistenceEnabled = false
-        settings.isSSLEnabled = false
-        Firestore.firestore().settings = settings
-        
-        // 設定 Auth 模擬器
-        Auth.auth().useEmulator(withHost: "127.0.0.1", port: 9099)
-        
-        // 設定 Storage 模擬器
-        Storage.storage().useEmulator(withHost: "127.0.0.1", port: 9199)
-        #endif
-        */
     }
     
     var body: some Scene {
@@ -46,9 +29,16 @@ struct nomisApp: App {
             if authViewModel.isAuthenticated {
                 MainTabView()
                     .environmentObject(authViewModel)
+                    .environment(\.managedObjectContext, coreDataManager.mainContext)
             } else {
                 LoginView()
                     .environmentObject(authViewModel)
+                    .environment(\.managedObjectContext, coreDataManager.mainContext)
+            }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                coreDataManager.saveContext()
             }
         }
     }

@@ -12,6 +12,10 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerPresen
     private let firebaseService: FirebaseService
     private var stateListener: AuthStateDidChangeListenerHandle?
     private var currentNonce: String?
+    public var currentUser: FirebaseAuth.User? {
+        return Auth.auth().currentUser
+    }
+
     
     init(firebaseService: FirebaseService = FirebaseService.shared) {
         self.firebaseService = firebaseService
