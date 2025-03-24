@@ -214,7 +214,10 @@ public class FirebaseService: ObservableObject {
             "title": transaction.title,
             "amount": transaction.amount,
             "date": transaction.date,
-            "category": transaction.category.rawValue,
+            "categoryId": transaction.category.id,
+            "categoryName": transaction.category.name,
+            "categoryIcon": transaction.category.icon,
+            "categoryColorHex": transaction.category.color.toHex() ?? "#808080",
             "type": transaction.type.rawValue,
             "note": transaction.note ?? "",
             "createdAt": FieldValue.serverTimestamp()
@@ -248,12 +251,29 @@ public class FirebaseService: ObservableObject {
             guard let title = data["title"] as? String,
                   let amount = data["amount"] as? Double,
                   let date = (data["date"] as? Timestamp)?.dateValue(),
-                  let categoryString = data["category"] as? String,
                   let typeString = data["type"] as? String,
-                  let category = Category(rawValue: categoryString),
                   let type = TransactionType(rawValue: typeString)
             else {
                 return nil
+            }
+            
+            // 根據舊格式或新格式處理分類
+            let category: Category
+            if let categoryId = data["categoryId"] as? String,
+               let categoryName = data["categoryName"] as? String,
+               let categoryIcon = data["categoryIcon"] as? String,
+               let categoryColorHex = data["categoryColorHex"] as? String {
+                // 使用新格式的分類
+                let color = Color(hex: categoryColorHex) ?? .gray
+                category = Category(id: categoryId, name: categoryName, icon: categoryIcon, color: color)
+            } else if let categoryString = data["category"] as? String,
+                      // 嘗試查找預設分類
+                      let defaultCategory = Category.defaultCategories.first(where: { $0.name == categoryString }) {
+                // 相容舊格式的資料
+                category = defaultCategory
+            } else {
+                // 如果都無法處理，使用「其他」分類
+                category = Category.other
             }
             
             return Transaction(
@@ -324,7 +344,10 @@ public class FirebaseService: ObservableObject {
             "title": transaction.title,
             "amount": transaction.amount,
             "date": transaction.date,
-            "category": transaction.category.rawValue,
+            "categoryId": transaction.category.id,
+            "categoryName": transaction.category.name,
+            "categoryIcon": transaction.category.icon,
+            "categoryColorHex": transaction.category.color.toHex() ?? "#808080",
             "type": transaction.type.rawValue,
             "note": transaction.note ?? "",
             "updatedAt": FieldValue.serverTimestamp()
@@ -358,6 +381,66 @@ public class FirebaseService: ObservableObject {
             throw NSError(domain: "FirebaseService", code: 404, userInfo: [NSLocalizedDescriptionKey: "User not found"])
         }
         return User(id: id, name: name, email: email)
+    }
+    
+    // MARK: - 分類相關方法
+    
+    // 獲取群組的自定義分類
+    public func fetchCategories(groupID: String) async throws -> [Category] {
+        let snapshot = try await db.collection("groups").document(groupID).collection("categories").getDocuments()
+        
+        var categories: [Category] = []
+        for document in snapshot.documents {
+            let data = document.data()
+            
+            let id = document.documentID
+            guard let name = data["name"] as? String,
+                  let icon = data["icon"] as? String,
+                  let colorHex = data["colorHex"] as? String else {
+                continue
+            }
+            
+            let color = Color(hex: colorHex) ?? .gray
+            let category = Category(id: id, name: name, icon: icon, color: color, groupId: groupID)
+            categories.append(category)
+        }
+        
+        return categories
+    }
+    
+    // 添加自定義分類
+    public func addCategory(_ category: Category, groupID: String) async throws {
+        let categoryData: [String: Any] = [
+            "name": category.name,
+            "icon": category.icon,
+            "colorHex": category.color.toHex() ?? "#808080",
+            "createdAt": Timestamp(date: Date())
+        ]
+        
+        if category.id.isEmpty {
+            // 創建新文檔
+            try await db.collection("groups").document(groupID).collection("categories").addDocument(data: categoryData)
+        } else {
+            // 使用預設 ID
+            try await db.collection("groups").document(groupID).collection("categories").document(category.id).setData(categoryData)
+        }
+    }
+    
+    // 更新自定義分類
+    public func updateCategory(_ category: Category, groupID: String) async throws {
+        let categoryData: [String: Any] = [
+            "name": category.name,
+            "icon": category.icon,
+            "colorHex": category.color.toHex() ?? "#808080",
+            "updatedAt": Timestamp(date: Date())
+        ]
+        
+        try await db.collection("groups").document(groupID).collection("categories").document(category.id).updateData(categoryData)
+    }
+    
+    // 刪除自定義分類
+    public func deleteCategory(_ categoryID: String, groupID: String) async throws {
+        try await db.collection("groups").document(groupID).collection("categories").document(categoryID).delete()
     }
 }
 

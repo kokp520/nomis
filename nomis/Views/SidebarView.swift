@@ -120,27 +120,48 @@ struct SidebarView: View {
                     
                     Divider()
                     
-                    // 底部按鈕
-                    Button(action: {
-                        showingCreateGroup = true
-                    }) {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title2)
-                            Text("建立新群組")
-                                .font(.headline)
-                            Spacer()
+                    // 底部按鈕區域
+                    VStack(spacing: 12) {
+                        // 建立新群組按鈕
+                        Button(action: {
+                            showingCreateGroup = true
+                        }) {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title2)
+                                Text("建立新群組")
+                                    .font(.headline)
+                                Spacer()
+                            }
+                            .foregroundColor(.blue)
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 20)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.blue.opacity(0.1))
+                            )
                         }
-                        .foregroundColor(.blue)
-                        .padding(.vertical, 16)
-                        .padding(.horizontal, 20)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.blue.opacity(0.1))
-                        )
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 16)
+                        
+                        // 分類管理按鈕
+                        NavigationLink(destination: CategoryManagementView()) {
+                            HStack {
+                                Image(systemName: "tag.circle.fill")
+                                    .font(.title2)
+                                Text("分類管理")
+                                    .font(.headline)
+                                Spacer()
+                            }
+                            .foregroundColor(.green)
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 20)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.green.opacity(0.1))
+                            )
+                        }
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 16)
                 }
                 .frame(width: min(UIScreen.main.bounds.width * 0.85, 340))
                 .background(Color(.systemBackground))

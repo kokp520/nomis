@@ -265,40 +265,30 @@ private struct DatePickerView: View {
     }
 }
 
-// 類別選擇器視圖
+// 分類選擇器視圖
 private struct CategoryPickerView: View {
-    @Environment(\.dismiss) var dismiss
     @Binding var selectedCategory: Category
     @Binding var title: String
     let type: TransactionType
-    @EnvironmentObject var viewModel: TransactionViewModel
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var categoryViewModel = CategoryViewModel()
     
-    var categories: [Category] {
-        switch type {
-        case .expense:
-            return [.food, .transport, .entertainment, .shopping, .other]
-        case .income:
-            return [.salary, .investment, .other]
-        default:
-            return []
-        }
+    private var categories: [Category] {
+        categoryViewModel.categoriesForType(type)
     }
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
             HStack {
                 Text("選擇類別")
-                    .font(.headline)
+                    .font(.title3)
+                    .fontWeight(.semibold)
                 Spacer()
-                Button("完成") {
-                    dismiss()
-                }
-                .foregroundColor(.blue)
             }
             .padding()
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 4), spacing: 16) {
-                ForEach(categories, id: \.self) { category in
+                ForEach(categories) { category in
                     Button(action: {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                             selectedCategory = category
@@ -310,13 +300,13 @@ private struct CategoryPickerView: View {
                         VStack(spacing: 12) {
                             ZStack {
                                 Circle()
-                                    .fill(category == selectedCategory ? 
+                                    .fill(selectedCategory.id == category.id ? 
                                         Color.blue.opacity(0.15) : 
                                         Color.adaptiveBackground)
                                     .frame(width: 70, height: 70)
                                     .overlay(
                                         Circle()
-                                            .stroke(category == selectedCategory ?
+                                            .stroke(selectedCategory.id == category.id ?
                                                 Color.blue.opacity(0.3) :
                                                 Color.primary.opacity(0.1),
                                                 lineWidth: 1)
@@ -327,11 +317,11 @@ private struct CategoryPickerView: View {
                                 Text(category.icon)
                                     .font(.system(size: 32))
                             }
-                            .scaleEffect(category == selectedCategory ? 1.1 : 1.0)
+                            .scaleEffect(selectedCategory.id == category.id ? 1.1 : 1.0)
                             
-                            Text(category.rawValue)
+                            Text(category.name)
                                 .font(.system(size: 14))
-                                .foregroundColor(category == selectedCategory ?
+                                .foregroundColor(selectedCategory.id == category.id ?
                                     .blue : .adaptiveText)
                         }
                     }
@@ -393,7 +383,7 @@ private struct DetailInputView: View {
                         HStack(spacing: 8) {
                             Text(category.icon)
                                 .font(.title3)
-                            Text(category.rawValue)
+                            Text(category.name)
                                 .foregroundColor(.adaptiveText)
                         }
                         .padding(.vertical, 4)
@@ -530,6 +520,7 @@ private struct DetailInputView: View {
     }
 }
 
+// 添加交易視圖
 struct AddTransactionView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var isPresented: Bool
@@ -546,23 +537,36 @@ struct AddTransactionView: View {
     let type: TransactionType
     let editingTransaction: Transaction?
     
+    @StateObject private var categoryViewModel = CategoryViewModel()
+    
     init(isPresented: Binding<Bool>, type: TransactionType, editingTransaction: Transaction? = nil) {
         self._isPresented = isPresented
         self.type = type
         self.editingTransaction = editingTransaction
         
         if let transaction = editingTransaction {
-            _amount = State(initialValue: String(format: "%.2f", transaction.amount))
-            _category = State(initialValue: transaction.category)
-            _title = State(initialValue: transaction.title)
-            _note = State(initialValue: transaction.note ?? "")
-            _selectedDate = State(initialValue: transaction.date)
+            // 如果是編輯模式，使用現有交易的資料
+            self._amount = State(initialValue: String(format: "%.0f", transaction.amount))
+            self._title = State(initialValue: transaction.title)
+            self._note = State(initialValue: transaction.note ?? "")
+            self._selectedDate = State(initialValue: transaction.date)
+            self._category = State(initialValue: transaction.category)
         } else {
-            _amount = State(initialValue: "")
-            _category = State(initialValue: type == .expense ? .food : .salary)
-            _title = State(initialValue: "")
-            _note = State(initialValue: "")
-            _selectedDate = State(initialValue: Date())
+            // 非編輯模式，設定預設值
+            self._amount = State(initialValue: "")
+            self._title = State(initialValue: "")
+            self._note = State(initialValue: "")
+            self._selectedDate = State(initialValue: Date())
+            
+            // 根據交易類型選擇初始分類
+            let initialCategory: Category
+            switch type {
+            case .income:
+                initialCategory = Category.salary
+            case .expense:
+                initialCategory = Category.food
+            }
+            self._category = State(initialValue: initialCategory)
         }
     }
     

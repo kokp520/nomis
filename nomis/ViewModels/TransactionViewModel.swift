@@ -6,10 +6,11 @@ import SwiftUI
 class TransactionViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var selectedPeriod: DatePeriod = .month
-    @Published private var budgets: [Category: Double] = [:]
+    @Published private var budgets: [String: Double] = [:]
     @Published var categoryExpenses: [CategoryExpense] = []
     private var firebaseService = FirebaseService.shared
     private var groupChangeObserver: NSObjectProtocol?
+    private var categoryViewModel: CategoryViewModel?
     
     // 快取計算結果
     private var cachedTotalIncome: Double?
@@ -46,7 +47,7 @@ class TransactionViewModel: ObservableObject {
     struct CategoryExpense: Identifiable {
         let category: Category
         let amount: Double
-        var id: Category { category }
+        var id: String { category.id }
     }
     
     var recentTransactions: [Transaction] {
@@ -109,16 +110,16 @@ class TransactionViewModel: ObservableObject {
     
     func expenses(for category: Category) -> Double {
         transactions
-            .filter { $0.type == .expense && $0.category == category }
+            .filter { $0.type == .expense && $0.category.id == category.id }
             .reduce(0) { $0 + $1.amount }
     }
     
     func budget(for category: Category) -> Double? {
-        budgets[category]
+        budgets[category.id]
     }
     
     func setBudget(_ amount: Double, for category: Category) {
-        budgets[category] = amount
+        budgets[category.id] = amount
         saveBudgets()
     }
     
@@ -152,14 +153,18 @@ class TransactionViewModel: ObservableObject {
     }
     
     private func saveBudgets() {
-        if let encoded = try? JSONEncoder().encode(budgets) {
+        let budgetsData = budgets.reduce(into: [String: Double]()) { result, entry in
+            result[entry.key] = entry.value
+        }
+        
+        if let encoded = try? JSONEncoder().encode(budgetsData) {
             UserDefaults.standard.set(encoded, forKey: "budgets")
         }
     }
     
     private func loadBudgets() {
         if let data = UserDefaults.standard.data(forKey: "budgets"),
-           let decoded = try? JSONDecoder().decode([Category: Double].self, from: data)
+           let decoded = try? JSONDecoder().decode([String: Double].self, from: data)
         {
             budgets = decoded
         }
@@ -175,30 +180,36 @@ class TransactionViewModel: ObservableObject {
     }
     
     func updateCategoryExpenses() {
-        var expensesByCategory: [Category: Double] = [:]
+        categoryExpenses = []
         
-        for transaction in transactions where transaction.type == .expense {
-            expensesByCategory[transaction.category, default: 0] += transaction.amount
+        let expensesByCategory = Dictionary(grouping: transactions.filter { $0.type == .expense }) { $0.category.id }
+        
+        categoryExpenses = expensesByCategory.compactMap { (categoryId, transactions) in
+            guard let firstTransaction = transactions.first else { return nil }
+            return CategoryExpense(
+                category: firstTransaction.category,
+                amount: transactions.reduce(0) { $0 + $1.amount }
+            )
         }
-        
-        categoryExpenses = expensesByCategory.map { category, amount in
-            CategoryExpense(category: category, amount: amount)
-        }.sorted { $0.amount > $1.amount }
+        .sorted { $0.amount > $1.amount }
     }
     
-    func fetchTransactions() async {
-        guard let group = await FirebaseService.shared.selectedGroup else { return }
+    @MainActor
+    func loadTransactionsFromFirebase() async {
+        guard let group = firebaseService.selectedGroup else {
+            print("DEBUG: 無法加載交易：未選擇群組")
+            return
+        }
         
         do {
-            let transactions = try await FirebaseService.shared.fetchTransactions(groupID: group.id)
-            
-            DispatchQueue.main.async {
-                self.transactions = transactions
+            let loadedTransactions = try await firebaseService.fetchTransactions(groupID: group.id)
+            await MainActor.run {
+                self.transactions = loadedTransactions
                 self.invalidateCache()
                 self.updateCategoryExpenses()
             }
         } catch {
-            print("Error fetching transactions: \(error)")
+            print("DEBUG: 加載交易時發生錯誤: \(error)")
         }
     }
     
@@ -210,10 +221,29 @@ class TransactionViewModel: ObservableObject {
         }
     }
     
-    init(firebaseService: FirebaseService = FirebaseService.shared) {
-        self.firebaseService = firebaseService
+    init(categoryViewModel: CategoryViewModel? = nil) {
+        self.categoryViewModel = categoryViewModel
         
-        setupGroupChangeObserver()
+        // 監聽群組變更
+        groupChangeObserver = NotificationCenter.default.addObserver(
+            forName: .groupDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task {
+                await self?.loadTransactionsFromFirebase()
+            }
+        }
+        
+        // 初始載入資料
+        loadBudgets()
+        
+        // 如果有選擇群組，則從 Firebase 加載交易
+        Task {
+            if firebaseService.selectedGroup != nil {
+                await loadTransactionsFromFirebase()
+            }
+        }
         
         #if DEBUG
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
@@ -229,18 +259,6 @@ class TransactionViewModel: ObservableObject {
         #endif
     }
     
-    private func setupGroupChangeObserver() {
-        groupChangeObserver = NotificationCenter.default.addObserver(
-            forName: .groupDidChange,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            Task {
-                await self?.fetchTransactions()
-            }
-        }
-    }
-    
     deinit {
         if let observer = groupChangeObserver {
             NotificationCenter.default.removeObserver(observer)
@@ -252,7 +270,7 @@ class TransactionViewModel: ObservableObject {
 extension TransactionViewModel {
     static var preview: TransactionViewModel {
         @MainActor get {
-            let viewModel = TransactionViewModel(firebaseService: FirebaseService.preview)
+            let viewModel = TransactionViewModel(categoryViewModel: CategoryViewModel.preview)
             
             // 創建跨越不同時間的交易記錄
             let calendar = Calendar.current

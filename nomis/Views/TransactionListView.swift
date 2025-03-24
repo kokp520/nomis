@@ -19,7 +19,7 @@ struct TransactionItemView: View {
                 VStack(alignment: .leading) {
                     Text(transaction.title)
                         .font(.headline)
-                    Text(transaction.category.rawValue)
+                    Text(transaction.category.name)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -103,7 +103,7 @@ struct TransactionListView: View {
         } else {
             return viewModel.transactions.filter { transaction in
                 transaction.title.localizedCaseInsensitiveContains(searchText) ||
-                transaction.category.rawValue.localizedCaseInsensitiveContains(searchText)
+                transaction.category.name.localizedCaseInsensitiveContains(searchText)
             }
         }
     }

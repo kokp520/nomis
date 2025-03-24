@@ -1,5 +1,3 @@
-
-
 // 已經經換成home view了 先註解
 import Charts
 import FirebaseCore
@@ -76,18 +74,46 @@ struct CategoryExpenseView: View {
 
                 if #available(iOS 16.0, *) {
                     Chart {
-                        ForEach(categoryExpenses, id: \.category) { item in
+                        ForEach(categoryExpenses, id: \.id) { item in
                             SectorMark(
                                 angle: .value("Amount", item.amount),
                                 innerRadius: .ratio(0.618),
                                 angularInset: 1.5
                             )
-                            .foregroundStyle(by: .value("Category", item.category.rawValue))
+                            .foregroundStyle(by: .value("Category", item.category.name))
                         }
                     }
                     .frame(height: 200)
                 }
             }
+        }
+    }
+}
+
+struct OverviewTransactionRowView: View {
+    let transaction: Transaction
+    
+    var body: some View {
+        HStack {
+            Text(transaction.category.icon)
+                .font(.title2)
+                .padding(8)
+                .background(transaction.category.color.opacity(0.2))
+                .clipShape(Circle())
+            
+            VStack(alignment: .leading) {
+                Text(transaction.title)
+                    .font(.headline)
+                Text(transaction.category.name)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            Text(transaction.type == .income ? "+\(transaction.amount)" : "-\(transaction.amount)")
+                .font(.headline)
+                .foregroundColor(transaction.type == .income ? .green : .red)
         }
     }
 }
@@ -102,7 +128,7 @@ struct RecentTransactionsView: View {
                     .font(.headline)
 
                 ForEach(Array(recentTransactions.prefix(5))) { transaction in
-                    TransactionRowView(transaction: transaction)
+                    OverviewTransactionRowView(transaction: transaction)
                         .padding(.vertical, 4)
 
                     if transaction.id != recentTransactions.prefix(5).last?.id {

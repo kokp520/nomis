@@ -29,6 +29,8 @@
 		52C6B3932D6867FC009B08D7 /* SidebarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C6B3922D6867FC009B08D7 /* SidebarViewModel.swift */; };
 		52C6B3952D686B9E009B08D7 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C6B3942D686B9E009B08D7 /* SidebarView.swift */; };
 		52C6B3972D6884EB009B08D7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C6B3962D6884EB009B08D7 /* HomeView.swift */; };
+		52F08A122D90F5AD00788F4E /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F08A112D90F5AC00788F4E /* CategoryViewModel.swift */; };
+		52F08A142D90F5E800788F4E /* CategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F08A132D90F5E800788F4E /* CategoryManagementView.swift */; };
 		52F889D32D5C455E00341A4D /* DatabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C132D5C3CB900B76E68 /* DatabaseConfig.swift */; };
 		52F889D42D5C455E00341A4D /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FD3C142D5C3CB900B76E68 /* FirebaseService.swift */; };
 		52F889D62D5C4DC300341A4D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F889D52D5C4DC300341A4D /* LoginView.swift */; };
@@ -79,6 +81,8 @@
 		52C6B3922D6867FC009B08D7 /* SidebarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarViewModel.swift; sourceTree = "<group>"; };
 		52C6B3942D686B9E009B08D7 /* SidebarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		52C6B3962D6884EB009B08D7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		52F08A112D90F5AC00788F4E /* CategoryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		52F08A132D90F5E800788F4E /* CategoryManagementView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryManagementView.swift; sourceTree = "<group>"; };
 		52F889D52D5C4DC300341A4D /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		52F889E72D5C7F7C00341A4D /* FontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
@@ -161,6 +165,7 @@
 		5204F6DE2D549FF900038001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				52F08A132D90F5E800788F4E /* CategoryManagementView.swift */,
 				52C6B3942D686B9E009B08D7 /* SidebarView.swift */,
 				52F889D52D5C4DC300341A4D /* LoginView.swift */,
 				5262DB1F2D5760D4004D5156 /* SettingsView.swift */,
@@ -207,6 +212,7 @@
 		5262DB5B2D5B0C2A004D5156 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				52F08A112D90F5AC00788F4E /* CategoryViewModel.swift */,
 				52C6B3922D6867FC009B08D7 /* SidebarViewModel.swift */,
 				52F889D72D5C4E3B00341A4D /* AuthViewModel.swift */,
 				528599A22D5B340800CB2A0B /* Services */,
@@ -377,10 +383,12 @@
 				52FD3C0D2D5C322000B76E68 /* User.swift in Sources */,
 				52C6B3932D6867FC009B08D7 /* SidebarViewModel.swift in Sources */,
 				5262DB232D578380004D5156 /* CommonViews.swift in Sources */,
+				52F08A142D90F5E800788F4E /* CategoryManagementView.swift in Sources */,
 				5262DB562D5B0C0B004D5156 /* Transaction.swift in Sources */,
 				5204F6CB2D549D0400038001 /* nomisApp.swift in Sources */,
 				5262DB1E2D5760C8004D5156 /* OverviewView.swift in Sources */,
 				5262DB5C2D5B0C2A004D5156 /* TransactionViewModel.swift in Sources */,
+				52F08A122D90F5AD00788F4E /* CategoryViewModel.swift in Sources */,
 				5262DB122D576060004D5156 /* MainTabView.swift in Sources */,
 				5262DB1D2D5760C8004D5156 /* TransactionListView.swift in Sources */,
 				52C6B3952D686B9E009B08D7 /* SidebarView.swift in Sources */,

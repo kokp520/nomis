@@ -37,7 +37,7 @@ struct TransactionRowView: View {
                     Text(transaction.title)
                         .font(.subheadline)
                         .foregroundColor(.adaptiveText)
-                    Text(transaction.category.rawValue)
+                    Text(transaction.category.name)
                         .font(.caption)
                         .foregroundColor(.adaptiveSecondaryText)
                 }

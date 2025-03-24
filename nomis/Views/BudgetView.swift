@@ -15,7 +15,7 @@ struct BudgetChartView: View {
         Chart {
             ForEach(categoryExpenses) { item in
                 BarMark(
-                    x: .value("Category", item.category.rawValue),
+                    x: .value("Category", item.category.name),
                     y: .value("Amount", item.amount)
                 )
                 .foregroundStyle(item.category.color)
@@ -43,7 +43,7 @@ struct BudgetItemView: View {
                 .clipShape(Circle())
             
             VStack(alignment: .leading) {
-                Text(category.rawValue)
+                Text(category.name)
                     .font(.headline)
                 Text("已使用：\(expense, specifier: "%.2f")")
                     .font(.subheadline)
@@ -83,7 +83,7 @@ struct BudgetView: View {
                             BudgetChartView(categoryExpenses: viewModel.categoryExpenses)
                             
                             // 預算列表
-                            ForEach(Category.allCases, id: \.self) { category in
+                            ForEach(Category.defaultCategories) { category in
                                 BudgetItemView(
                                     category: category,
                                     expense: viewModel.categoryExpenses.first(where: { $0.category == category })?.amount ?? 0,
@@ -124,7 +124,7 @@ struct BudgetView: View {
                             trailing: Button("儲存") {
                                 if let amount = Double(budgetAmount) {
                                     // TODO: 儲存預算
-                                    print("設定 \(selectedCategory.rawValue) 預算為 \(amount)")
+                                    print("設定 \(selectedCategory.name) 預算為 \(amount)")
                                 }
                                 showingAddBudget = false
                             }
